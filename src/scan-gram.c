@@ -36,7 +36,7 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 37
+#define YY_FLEX_SUBMINOR_VERSION 35
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -97,6 +97,7 @@ typedef int flex_int32_t;
 typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
+#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -126,8 +127,6 @@ typedef unsigned int flex_uint32_t;
 #ifndef UINT32_MAX
 #define UINT32_MAX             (4294967295U)
 #endif
-
-#endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
 
@@ -215,13 +214,8 @@ typedef unsigned int flex_uint32_t;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 #endif
 
-#ifndef YY_TYPEDEF_YY_SIZE_T
-#define YY_TYPEDEF_YY_SIZE_T
-typedef size_t yy_size_t;
-#endif
-
 /* %if-not-reentrant */
-extern yy_size_t gram_leng;
+extern int gram_leng;
 /* %endif */
 
 /* %if-c-only */
@@ -252,6 +246,11 @@ extern FILE *gram_in, *gram_out;
 
 #define unput(c) yyunput( c, (yytext_ptr)  )
 
+#ifndef YY_TYPEDEF_YY_SIZE_T
+#define YY_TYPEDEF_YY_SIZE_T
+typedef size_t yy_size_t;
+#endif
+
 #ifndef YY_STRUCT_YY_BUFFER_STATE
 #define YY_STRUCT_YY_BUFFER_STATE
 struct yy_buffer_state
@@ -274,7 +273,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	yy_size_t yy_n_chars;
+	int yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -358,8 +357,8 @@ static YY_BUFFER_STATE * yy_buffer_stack = 0; /**< Stack as an array. */
 
 /* yy_hold_char holds the character lost when gram_text is formed. */
 static char yy_hold_char;
-static yy_size_t yy_n_chars;		/* number of characters read into yy_ch_buf */
-yy_size_t gram_leng;
+static int yy_n_chars;		/* number of characters read into yy_ch_buf */
+int gram_leng;
 
 /* Points to current character in buffer. */
 static char *yy_c_buf_p = (char *) 0;
@@ -390,7 +389,7 @@ static void gram__init_buffer (YY_BUFFER_STATE b,FILE *file  );
 
 YY_BUFFER_STATE gram__scan_buffer (char *base,yy_size_t size  );
 YY_BUFFER_STATE gram__scan_string (yyconst char *yy_str  );
-YY_BUFFER_STATE gram__scan_bytes (yyconst char *bytes,yy_size_t len  );
+YY_BUFFER_STATE gram__scan_bytes (yyconst char *bytes,int len  );
 
 /* %endif */
 
@@ -425,7 +424,7 @@ void gram_free (void *  );
 /* %% [1.0] gram_text/gram_in/gram_out/yy_state_type/gram_lineno etc. def's & init go here */
 /* Begin user sect3 */
 
-#define gram_wrap() 1
+#define gram_wrap(n) 1
 #define YY_SKIP_YYWRAP
 
 #define FLEX_DEBUG
@@ -999,7 +998,7 @@ static yyconst flex_int16_t yy_rule_linenum[130] =
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *gram_text;
-#line 1 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 1 "src/scan-gram.l"
 /* Bison Grammar Scanner                             -*- C -*-
 
    Copyright (C) 2002-2015 Free Software Foundation, Inc.
@@ -1019,7 +1018,7 @@ char *gram_text;
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 #define YY_NO_INPUT 1
-#line 24 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 24 "src/scan-gram.l"
 /* Work around a bug in flex 2.5.31.  See Debian bug 333231
    <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
 #undef gram_wrap
@@ -1129,7 +1128,7 @@ generics/template types.  */
    white space between the backslash and the newline.  */
 /* An equal sign, with optional leading whitespaces. This is used in some
    deprecated constructs. */
-#line 1133 "src/scan-gram.c"
+#line 1132 "src/scan-gram.c"
 
 #define INITIAL 0
 #define SC_YACC_COMMENT 1
@@ -1196,7 +1195,7 @@ FILE *gram_get_out (void );
 
 void gram_set_out  (FILE * out_str  );
 
-yy_size_t gram_get_leng (void );
+int gram_get_leng (void );
 
 char *gram_get_text (void );
 
@@ -1279,7 +1278,7 @@ static int input (void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		size_t n; \
+		unsigned n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( gram_in )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -1389,7 +1388,7 @@ YY_DECL
 	register int yy_act;
     
 /* %% [7.0] user's declarations go here */
-#line 146 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 146 "src/scan-gram.l"
 
 
   /* Nesting level.  Either for nested braces, or nested angle brackets
@@ -1426,7 +1425,7 @@ YY_DECL
   | Scanning white space.  |
   `-----------------------*/
 
-#line 1430 "src/scan-gram.c"
+#line 1429 "src/scan-gram.c"
 
 	if ( !(yy_init) )
 		{
@@ -1540,23 +1539,23 @@ do_action:	/* This label is used only to access EOF actions. */
 /* Comments and white space.  */
 case 1:
 YY_RULE_SETUP
-#line 185 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 185 "src/scan-gram.l"
 {
      complain (loc, Wother, _("stray ',' treated as white space"));
   }
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
-#line 189 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 189 "src/scan-gram.l"
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 189 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 189 "src/scan-gram.l"
 continue;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 190 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 190 "src/scan-gram.l"
 {
     token_start = loc->start;
     context_state = YY_START;
@@ -1568,7 +1567,7 @@ YY_RULE_SETUP
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 198 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 198 "src/scan-gram.l"
 {
     handle_syncline (gram_text + sizeof "#line " - 1, *loc);
   }
@@ -1586,313 +1585,313 @@ YY_RULE_SETUP
 
 case 6:
 YY_RULE_SETUP
-#line 216 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 216 "src/scan-gram.l"
 return PERCENT_NONASSOC;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 217 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 217 "src/scan-gram.l"
 return PERCENT_CODE;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 218 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 218 "src/scan-gram.l"
 RETURN_PERCENT_FLAG("parse.trace");
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 219 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 219 "src/scan-gram.l"
 return PERCENT_DEFAULT_PREC;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 220 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 220 "src/scan-gram.l"
 return PERCENT_DEFINE;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 221 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 221 "src/scan-gram.l"
 return PERCENT_DEFINES;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 222 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 222 "src/scan-gram.l"
 return PERCENT_DESTRUCTOR;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 223 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 223 "src/scan-gram.l"
 return PERCENT_DPREC;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 224 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 224 "src/scan-gram.l"
 return PERCENT_EMPTY;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 225 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 225 "src/scan-gram.l"
 return PERCENT_ERROR_VERBOSE;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 226 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 226 "src/scan-gram.l"
 return PERCENT_EXPECT;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 227 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 227 "src/scan-gram.l"
 return PERCENT_EXPECT_RR;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 228 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 228 "src/scan-gram.l"
 return PERCENT_FILE_PREFIX;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 229 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 229 "src/scan-gram.l"
 return PERCENT_YACC;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 230 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 230 "src/scan-gram.l"
 return PERCENT_INITIAL_ACTION;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 231 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 231 "src/scan-gram.l"
 return PERCENT_GLR_PARSER;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 232 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 232 "src/scan-gram.l"
 return PERCENT_LANGUAGE;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 233 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 233 "src/scan-gram.l"
 return PERCENT_LEFT;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 234 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 234 "src/scan-gram.l"
 RETURN_PERCENT_PARAM(lex);
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 235 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 235 "src/scan-gram.l"
 RETURN_PERCENT_FLAG("locations");
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 236 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 236 "src/scan-gram.l"
 return PERCENT_MERGE;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 237 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 237 "src/scan-gram.l"
 return PERCENT_NAME_PREFIX;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 238 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 238 "src/scan-gram.l"
 return PERCENT_NO_DEFAULT_PREC;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 239 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 239 "src/scan-gram.l"
 return PERCENT_NO_LINES;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 240 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 240 "src/scan-gram.l"
 return PERCENT_NONASSOC;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 241 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 241 "src/scan-gram.l"
 return PERCENT_NONDETERMINISTIC_PARSER;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 242 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 242 "src/scan-gram.l"
 return PERCENT_NTERM;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 243 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 243 "src/scan-gram.l"
 return PERCENT_OUTPUT;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 244 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 244 "src/scan-gram.l"
 RETURN_PERCENT_PARAM(both);
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 245 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 245 "src/scan-gram.l"
 RETURN_PERCENT_PARAM(parse);
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 246 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 246 "src/scan-gram.l"
 return PERCENT_PREC;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 247 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 247 "src/scan-gram.l"
 return PERCENT_PRECEDENCE;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 248 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 248 "src/scan-gram.l"
 return PERCENT_PRINTER;
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 249 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 249 "src/scan-gram.l"
 RETURN_PERCENT_FLAG("api.pure");
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 250 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 250 "src/scan-gram.l"
 return PERCENT_REQUIRE;
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 251 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 251 "src/scan-gram.l"
 return PERCENT_RIGHT;
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 252 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 252 "src/scan-gram.l"
 return PERCENT_SKELETON;
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 253 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 253 "src/scan-gram.l"
 return PERCENT_START;
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 254 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 254 "src/scan-gram.l"
 return PERCENT_TOKEN;
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 255 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 255 "src/scan-gram.l"
 return PERCENT_TOKEN;
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 256 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 256 "src/scan-gram.l"
 return PERCENT_TOKEN_TABLE;
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 257 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 257 "src/scan-gram.l"
 return PERCENT_TYPE;
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 258 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 258 "src/scan-gram.l"
 return PERCENT_UNION;
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 259 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 259 "src/scan-gram.l"
 return PERCENT_VERBOSE;
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 260 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 260 "src/scan-gram.l"
 return PERCENT_YACC;
 	YY_BREAK
 /* deprecated */
 case 51:
 YY_RULE_SETUP
-#line 263 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 263 "src/scan-gram.l"
 DEPRECATED("%default-prec");
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 264 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 264 "src/scan-gram.l"
 DEPRECATED("%define parse.error verbose");
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 265 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 265 "src/scan-gram.l"
 DEPRECATED("%expect-rr");
 	YY_BREAK
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
-#line 266 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 266 "src/scan-gram.l"
 DEPRECATED("%file-prefix");
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 267 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 267 "src/scan-gram.l"
 DEPRECATED("%fixed-output-files");
 	YY_BREAK
 case 56:
 /* rule 56 can match eol */
 YY_RULE_SETUP
-#line 268 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 268 "src/scan-gram.l"
 DEPRECATED("%name-prefix");
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 269 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 269 "src/scan-gram.l"
 DEPRECATED("%no-default-prec");
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 270 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 270 "src/scan-gram.l"
 DEPRECATED("%no-lines");
 	YY_BREAK
 case 59:
 /* rule 59 can match eol */
 YY_RULE_SETUP
-#line 271 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 271 "src/scan-gram.l"
 DEPRECATED("%output");
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 272 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 272 "src/scan-gram.l"
 DEPRECATED("%pure-parser");
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 273 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 273 "src/scan-gram.l"
 DEPRECATED("%token-table");
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 275 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 275 "src/scan-gram.l"
 {
     complain (loc, complaint, _("invalid directive: %s"), quote (gram_text));
   }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 279 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 279 "src/scan-gram.l"
 return EQUAL;
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 280 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 280 "src/scan-gram.l"
 return PIPE;
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 281 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 281 "src/scan-gram.l"
 return SEMICOLON;
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 283 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 283 "src/scan-gram.l"
 {
     val->uniqstr = uniqstr_new (gram_text);
     id_loc = *loc;
@@ -1902,7 +1901,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 290 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 290 "src/scan-gram.l"
 {
     val->integer = scan_integer (gram_text, 10, *loc);
     return INT;
@@ -1910,7 +1909,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 294 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 294 "src/scan-gram.l"
 {
     val->integer = scan_integer (gram_text, 16, *loc);
     return INT;
@@ -1920,7 +1919,7 @@ YY_RULE_SETUP
      accept "1FOO" as "1 FOO".  */
 case 69:
 YY_RULE_SETUP
-#line 301 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 301 "src/scan-gram.l"
 {
     complain (loc, complaint, _("invalid identifier: %s"), quote (gram_text));
   }
@@ -1928,25 +1927,25 @@ YY_RULE_SETUP
 /* Characters.  */
 case 70:
 YY_RULE_SETUP
-#line 306 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 306 "src/scan-gram.l"
 token_start = loc->start; BEGIN SC_ESCAPED_CHARACTER;
 	YY_BREAK
 /* Strings. */
 case 71:
 YY_RULE_SETUP
-#line 309 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 309 "src/scan-gram.l"
 token_start = loc->start; BEGIN SC_ESCAPED_STRING;
 	YY_BREAK
 /* Prologue. */
 case 72:
 YY_RULE_SETUP
-#line 312 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 312 "src/scan-gram.l"
 code_start = loc->start; BEGIN SC_PROLOGUE;
 	YY_BREAK
 /* Code in between braces.  */
 case 73:
 YY_RULE_SETUP
-#line 315 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 315 "src/scan-gram.l"
 {
     STRING_GROW;
     nesting = 0;
@@ -1958,7 +1957,7 @@ YY_RULE_SETUP
 case 74:
 /* rule 74 can match eol */
 YY_RULE_SETUP
-#line 323 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 323 "src/scan-gram.l"
 {
     nesting = 0;
     code_start = loc->start;
@@ -1968,17 +1967,17 @@ YY_RULE_SETUP
 /* A type. */
 case 75:
 YY_RULE_SETUP
-#line 330 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 330 "src/scan-gram.l"
 return TAG_ANY;
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 331 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 331 "src/scan-gram.l"
 return TAG_NONE;
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 332 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 332 "src/scan-gram.l"
 {
     nesting = 0;
     token_start = loc->start;
@@ -1987,7 +1986,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 338 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 338 "src/scan-gram.l"
 {
     static int percent_percent_count;
     if (++percent_percent_count == 2)
@@ -1997,7 +1996,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 345 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 345 "src/scan-gram.l"
 {
     bracketed_id_str = NULL;
     bracketed_id_start = loc->start;
@@ -2007,7 +2006,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 352 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 352 "src/scan-gram.l"
 {
     complain (loc, complaint, "%s: %s",
               ngettext ("invalid character", "invalid characters", gram_leng),
@@ -2015,7 +2014,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 358 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 358 "src/scan-gram.l"
 {
     loc->start = loc->end = scanner_cursor;
     yyterminate ();
@@ -2030,7 +2029,7 @@ case YY_STATE_EOF(INITIAL):
 
 case 81:
 YY_RULE_SETUP
-#line 372 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 372 "src/scan-gram.l"
 complain (loc, complaint, _("invalid null character"));
 	YY_BREAK
 
@@ -2041,7 +2040,7 @@ complain (loc, complaint, _("invalid null character"));
 
 case 82:
 YY_RULE_SETUP
-#line 382 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 382 "src/scan-gram.l"
 {
     if (bracketed_id_str)
       {
@@ -2060,7 +2059,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 397 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 397 "src/scan-gram.l"
 {
     BEGIN (bracketed_id_str ? SC_RETURN_BRACKETED_ID : INITIAL);
     *loc = id_loc;
@@ -2069,7 +2068,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 402 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 402 "src/scan-gram.l"
 {
     ROLLBACK_CURRENT_TOKEN;
     BEGIN (bracketed_id_str ? SC_RETURN_BRACKETED_ID : INITIAL);
@@ -2078,7 +2077,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_AFTER_IDENTIFIER):
-#line 408 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 408 "src/scan-gram.l"
 {
     BEGIN (bracketed_id_str ? SC_RETURN_BRACKETED_ID : INITIAL);
     *loc = id_loc;
@@ -2093,7 +2092,7 @@ case YY_STATE_EOF(SC_AFTER_IDENTIFIER):
 
 case 85:
 YY_RULE_SETUP
-#line 421 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 421 "src/scan-gram.l"
 {
     if (bracketed_id_str)
       {
@@ -2110,7 +2109,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 434 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 434 "src/scan-gram.l"
 {
     BEGIN bracketed_id_context_state;
     if (bracketed_id_str)
@@ -2129,7 +2128,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 450 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 450 "src/scan-gram.l"
 {
     complain (loc, complaint, "%s: %s",
               ngettext ("invalid character in bracketed name",
@@ -2138,7 +2137,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_BRACKETED_ID):
-#line 457 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 457 "src/scan-gram.l"
 {
     BEGIN bracketed_id_context_state;
     unexpected_eof (bracketed_id_start, "]");
@@ -2149,7 +2148,7 @@ case YY_STATE_EOF(SC_BRACKETED_ID):
 
 case 88:
 YY_RULE_SETUP
-#line 465 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 465 "src/scan-gram.l"
 {
     ROLLBACK_CURRENT_TOKEN;
     val->uniqstr = bracketed_id_str;
@@ -2167,17 +2166,17 @@ YY_RULE_SETUP
 
 case 89:
 YY_RULE_SETUP
-#line 482 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 482 "src/scan-gram.l"
 BEGIN context_state;
 	YY_BREAK
 case 90:
 /* rule 90 can match eol */
 YY_RULE_SETUP
-#line 483 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 483 "src/scan-gram.l"
 continue;
 	YY_BREAK
 case YY_STATE_EOF(SC_YACC_COMMENT):
-#line 484 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 484 "src/scan-gram.l"
 unexpected_eof (token_start, "*/"); BEGIN context_state;
 	YY_BREAK
 
@@ -2189,11 +2188,11 @@ unexpected_eof (token_start, "*/"); BEGIN context_state;
 case 91:
 /* rule 91 can match eol */
 YY_RULE_SETUP
-#line 494 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 494 "src/scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case YY_STATE_EOF(SC_COMMENT):
-#line 495 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 495 "src/scan-gram.l"
 unexpected_eof (token_start, "*/"); BEGIN context_state;
 	YY_BREAK
 
@@ -2205,17 +2204,17 @@ unexpected_eof (token_start, "*/"); BEGIN context_state;
 case 92:
 /* rule 92 can match eol */
 YY_RULE_SETUP
-#line 505 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 505 "src/scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case 93:
 /* rule 93 can match eol */
 YY_RULE_SETUP
-#line 506 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 506 "src/scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 case YY_STATE_EOF(SC_LINE_COMMENT):
-#line 507 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 507 "src/scan-gram.l"
 BEGIN context_state;
 	YY_BREAK
 
@@ -2227,7 +2226,7 @@ BEGIN context_state;
 
 case 94:
 YY_RULE_SETUP
-#line 518 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 518 "src/scan-gram.l"
 {
     STRING_FINISH;
     loc->start = token_start;
@@ -2237,13 +2236,13 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_ESCAPED_STRING):
-#line 525 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 525 "src/scan-gram.l"
 unexpected_eof (token_start, "\"");
 	YY_BREAK
 case 95:
 /* rule 95 can match eol */
 YY_RULE_SETUP
-#line 526 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 526 "src/scan-gram.l"
 unexpected_newline (token_start, "\"");
 	YY_BREAK
 
@@ -2255,7 +2254,7 @@ unexpected_newline (token_start, "\"");
 
 case 96:
 YY_RULE_SETUP
-#line 536 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 536 "src/scan-gram.l"
 {
     STRING_FINISH;
     loc->start = token_start;
@@ -2279,11 +2278,11 @@ YY_RULE_SETUP
 case 97:
 /* rule 97 can match eol */
 YY_RULE_SETUP
-#line 555 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 555 "src/scan-gram.l"
 unexpected_newline (token_start, "'");
 	YY_BREAK
 case YY_STATE_EOF(SC_ESCAPED_CHARACTER):
-#line 556 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 556 "src/scan-gram.l"
 unexpected_eof (token_start, "'");
 	YY_BREAK
 
@@ -2294,7 +2293,7 @@ unexpected_eof (token_start, "'");
 
 case 98:
 YY_RULE_SETUP
-#line 567 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 567 "src/scan-gram.l"
 {
     --nesting;
     if (nesting < 0)
@@ -2312,16 +2311,16 @@ YY_RULE_SETUP
 case 99:
 /* rule 99 can match eol */
 YY_RULE_SETUP
-#line 581 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 581 "src/scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 582 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 582 "src/scan-gram.l"
 STRING_GROW; nesting += gram_leng;
 	YY_BREAK
 case YY_STATE_EOF(SC_TAG):
-#line 584 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 584 "src/scan-gram.l"
 unexpected_eof (token_start, ">");
 	YY_BREAK
 
@@ -2332,7 +2331,7 @@ unexpected_eof (token_start, ">");
 
 case 101:
 YY_RULE_SETUP
-#line 593 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 593 "src/scan-gram.l"
 {
     unsigned long int c = strtoul (gram_text + 1, NULL, 8);
     if (!c || UCHAR_MAX < c)
@@ -2344,7 +2343,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 602 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 602 "src/scan-gram.l"
 {
     verify (UCHAR_MAX < ULONG_MAX);
     unsigned long int c = strtoul (gram_text + 2, NULL, 16);
@@ -2357,48 +2356,48 @@ YY_RULE_SETUP
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
-#line 612 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 612 "src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\a');
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 613 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 613 "src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\b');
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 614 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 614 "src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\f');
 	YY_BREAK
 case 106:
 YY_RULE_SETUP
-#line 615 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 615 "src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\n');
 	YY_BREAK
 case 107:
 YY_RULE_SETUP
-#line 616 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 616 "src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\r');
 	YY_BREAK
 case 108:
 YY_RULE_SETUP
-#line 617 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 617 "src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\t');
 	YY_BREAK
 case 109:
 YY_RULE_SETUP
-#line 618 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 618 "src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\v');
 	YY_BREAK
 /* \\[\"\'?\\] would be shorter, but it confuses xgettext.  */
 case 110:
 YY_RULE_SETUP
-#line 621 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 621 "src/scan-gram.l"
 obstack_1grow (&obstack_for_string, gram_text[1]);
 	YY_BREAK
 case 111:
 YY_RULE_SETUP
-#line 623 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 623 "src/scan-gram.l"
 {
     int c = convert_ucn_to_byte (gram_text);
     if (c <= 0)
@@ -2411,7 +2410,7 @@ YY_RULE_SETUP
 case 112:
 /* rule 112 can match eol */
 YY_RULE_SETUP
-#line 631 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 631 "src/scan-gram.l"
 {
     char const *p = gram_text + 1;
     /* Quote only if escaping won't make the character visible.  */
@@ -2432,7 +2431,7 @@ YY_RULE_SETUP
 case 113:
 /* rule 113 can match eol */
 YY_RULE_SETUP
-#line 649 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 649 "src/scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 
@@ -2440,17 +2439,17 @@ STRING_GROW;
 
 case 114:
 YY_RULE_SETUP
-#line 654 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 654 "src/scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case 115:
 /* rule 115 can match eol */
 YY_RULE_SETUP
-#line 655 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 655 "src/scan-gram.l"
 unexpected_newline (token_start, "'");
 	YY_BREAK
 case YY_STATE_EOF(SC_CHARACTER):
-#line 656 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 656 "src/scan-gram.l"
 unexpected_eof (token_start, "'");
 	YY_BREAK
 
@@ -2458,17 +2457,17 @@ unexpected_eof (token_start, "'");
 
 case 116:
 YY_RULE_SETUP
-#line 661 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 661 "src/scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case 117:
 /* rule 117 can match eol */
 YY_RULE_SETUP
-#line 662 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 662 "src/scan-gram.l"
 unexpected_newline (token_start, "\"");
 	YY_BREAK
 case YY_STATE_EOF(SC_STRING):
-#line 663 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 663 "src/scan-gram.l"
 unexpected_eof (token_start, "\"");
 	YY_BREAK
 
@@ -2479,7 +2478,7 @@ unexpected_eof (token_start, "\"");
 
 case 118:
 YY_RULE_SETUP
-#line 673 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 673 "src/scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2489,7 +2488,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 119:
 YY_RULE_SETUP
-#line 679 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 679 "src/scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2500,7 +2499,7 @@ YY_RULE_SETUP
 case 120:
 /* rule 120 can match eol */
 YY_RULE_SETUP
-#line 685 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 685 "src/scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2511,7 +2510,7 @@ YY_RULE_SETUP
 case 121:
 /* rule 121 can match eol */
 YY_RULE_SETUP
-#line 691 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 691 "src/scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2528,13 +2527,13 @@ YY_RULE_SETUP
 case 122:
 /* rule 122 can match eol */
 YY_RULE_SETUP
-#line 707 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 707 "src/scan-gram.l"
 STRING_GROW; nesting++;
 	YY_BREAK
 case 123:
 /* rule 123 can match eol */
 YY_RULE_SETUP
-#line 708 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 708 "src/scan-gram.l"
 STRING_GROW; nesting--;
 	YY_BREAK
 /* Tokenize '<<%' correctly (as '<<' '%') rather than incorrrectly
@@ -2542,12 +2541,12 @@ STRING_GROW; nesting--;
 case 124:
 /* rule 124 can match eol */
 YY_RULE_SETUP
-#line 712 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 712 "src/scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 case YY_STATE_EOF(SC_BRACED_CODE):
 case YY_STATE_EOF(SC_PREDICATE):
-#line 714 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 714 "src/scan-gram.l"
 unexpected_eof (code_start, "}");
 	YY_BREAK
 
@@ -2555,7 +2554,7 @@ unexpected_eof (code_start, "}");
 
 case 125:
 YY_RULE_SETUP
-#line 719 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 719 "src/scan-gram.l"
 {
     obstack_1grow (&obstack_for_string, '}');
 
@@ -2575,7 +2574,7 @@ YY_RULE_SETUP
 
 case 126:
 YY_RULE_SETUP
-#line 736 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 736 "src/scan-gram.l"
 {
     --nesting;
     if (nesting < 0)
@@ -2598,7 +2597,7 @@ YY_RULE_SETUP
 
 case 127:
 YY_RULE_SETUP
-#line 757 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 757 "src/scan-gram.l"
 {
     STRING_FINISH;
     loc->start = code_start;
@@ -2608,7 +2607,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_PROLOGUE):
-#line 765 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 765 "src/scan-gram.l"
 unexpected_eof (code_start, "%}");
 	YY_BREAK
 
@@ -2619,7 +2618,7 @@ unexpected_eof (code_start, "%}");
 
 
 case YY_STATE_EOF(SC_EPILOGUE):
-#line 776 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 776 "src/scan-gram.l"
 {
     STRING_FINISH;
     loc->start = code_start;
@@ -2633,19 +2632,19 @@ case YY_STATE_EOF(SC_EPILOGUE):
   | By default, grow the string obstack with the input.  |
   `-----------------------------------------------------*/
 case 128:
-#line 791 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 791 "src/scan-gram.l"
 case 129:
 /* rule 129 can match eol */
 YY_RULE_SETUP
-#line 791 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 791 "src/scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 case 130:
 YY_RULE_SETUP
-#line 793 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 793 "src/scan-gram.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 2649 "src/scan-gram.c"
+#line 2648 "src/scan-gram.c"
 case YY_STATE_EOF(SC_RETURN_BRACKETED_ID):
 	yyterminate();
 
@@ -2845,21 +2844,21 @@ static int yy_get_next_buffer (void)
 
 	else
 		{
-			yy_size_t num_to_read =
+			int num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
 			{ /* Not enough room in the buffer - grow it. */
 
 			/* just a shorter name for the current buffer */
-			YY_BUFFER_STATE b = YY_CURRENT_BUFFER_LVALUE;
+			YY_BUFFER_STATE b = YY_CURRENT_BUFFER;
 
 			int yy_c_buf_p_offset =
 				(int) ((yy_c_buf_p) - b->yy_ch_buf);
 
 			if ( b->yy_is_our_buffer )
 				{
-				yy_size_t new_size = b->yy_buf_size * 2;
+				int new_size = b->yy_buf_size * 2;
 
 				if ( new_size <= 0 )
 					b->yy_buf_size += b->yy_buf_size / 8;
@@ -2890,7 +2889,7 @@ static int yy_get_next_buffer (void)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			(yy_n_chars), num_to_read );
+			(yy_n_chars), (size_t) num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = (yy_n_chars);
 		}
@@ -2999,7 +2998,7 @@ static int yy_get_next_buffer (void)
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 	yy_is_jam = (yy_current_state == 578);
 
-		return yy_is_jam ? 0 : yy_current_state;
+	return yy_is_jam ? 0 : yy_current_state;
 }
 
 /* %if-c-only */
@@ -3019,7 +3018,7 @@ static int yy_get_next_buffer (void)
 	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
 		{ /* need to shift things up to make room */
 		/* +2 for EOB chars. */
-		register yy_size_t number_to_move = (yy_n_chars) + 2;
+		register int number_to_move = (yy_n_chars) + 2;
 		register char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
 					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
 		register char *source =
@@ -3077,7 +3076,7 @@ static int yy_get_next_buffer (void)
 
 		else
 			{ /* need more input */
-			yy_size_t offset = (yy_c_buf_p) - (yytext_ptr);
+			int offset = (yy_c_buf_p) - (yytext_ptr);
 			++(yy_c_buf_p);
 
 			switch ( yy_get_next_buffer(  ) )
@@ -3262,6 +3261,13 @@ static void gram__load_buffer_state  (void)
 	gram_free((void *) b  );
 }
 
+/* %if-c-only */
+
+/* %endif */
+
+/* %if-c++-only */
+/* %endif */
+
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,
  * such as during a gram_restart() or at EOF.
@@ -3404,7 +3410,7 @@ static void gram_ensure_buffer_stack (void)
 /* %if-c++-only */
 /* %endif */
 {
-	yy_size_t num_to_alloc;
+	int num_to_alloc;
     
 	if (!(yy_buffer_stack)) {
 
@@ -3502,12 +3508,12 @@ YY_BUFFER_STATE gram__scan_string (yyconst char * yystr )
 /* %if-c-only */
 /** Setup the input buffer state to scan the given bytes. The next call to gram_lex() will
  * scan from a @e copy of @a bytes.
- * @param yybytes the byte buffer to scan
- * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
+ * @param bytes the byte buffer to scan
+ * @param len the number of bytes in the buffer pointed to by @a bytes.
  * 
  * @return the newly allocated buffer state object.
  */
-YY_BUFFER_STATE gram__scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_len )
+YY_BUFFER_STATE gram__scan_bytes  (yyconst char * yybytes, int  _yybytes_len )
 {
 	YY_BUFFER_STATE b;
 	char *buf;
@@ -3603,7 +3609,7 @@ FILE *gram_get_out  (void)
 /** Get the length of the current token.
  * 
  */
-yy_size_t gram_get_leng  (void)
+int gram_get_leng  (void)
 {
         return gram_leng;
 }
@@ -3772,7 +3778,7 @@ void gram_free (void * ptr )
 
 /* %ok-for-header */
 
-#line 793 "/Users/akim/src/gnu/bison/src/scan-gram.l"
+#line 793 "src/scan-gram.l"
 
 
 
