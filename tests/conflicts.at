@@ -1789,9 +1789,9 @@ for gram in sr-rr sr rr; do
 
       # Number of found conflicts.
       case $gram in
-        (sr)    sr_count=1; rr_count=0;;
-        (rr)    sr_count=0; rr_count=1;;
-        (sr-rr) sr_count=1; rr_count=1;;
+        sr)    sr_count=1; rr_count=0;;
+        rr)    sr_count=0; rr_count=1;;
+        sr-rr) sr_count=1; rr_count=1;;
       esac
 
       # Update number of expected conflicts: if %expect is given then
