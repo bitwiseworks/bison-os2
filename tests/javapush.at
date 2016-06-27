@@ -33,7 +33,7 @@ m4_define([PUSHPULLFLAG],[-Dapi.push-pull=both])
 # Check that FILE contains exactly COUNT lines matching ^LINE$
 # with grep.  Unquoted so that COUNT can be a shell expression.
 m4_define([AT_CHECK_JAVA_GREP],
-[AT_CHECK_UNQUOTED([grep -c '^$2$' $1], [ignore], [m4_default([$3], [1])
+[AT_CHECK_UNQUOTED([grep -c '^$2$' $1 | $PERL -pe 's/\n/\n/'], [ignore], [m4_default([$3], [1])
 ])])
 
 ##################################################

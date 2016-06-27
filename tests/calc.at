@@ -448,10 +448,12 @@ AT_DATA([[expout]],
 # 3. If locations are not used, remove them.
 AT_YYERROR_SEES_LOC_IF([],
 [[sed 's/^[-0-9.]*: //' expout >at-expout
+rm -f expout
 mv at-expout expout]])
 # 4. If error-verbose is not used, strip the', unexpected....' part.
 m4_bmatch([$1], [%define parse.error verbose], [],
 [[sed 's/syntax error, .*$/syntax error/' expout >at-expout
+rm -f expout
 mv at-expout expout]])
 # 5. Check
 AT_CHECK([cat stderr], 0, [expout])

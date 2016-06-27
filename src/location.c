@@ -161,10 +161,18 @@ cleanup_caret ()
 void
 location_caret (location loc, FILE *out)
 {
+#ifdef __OS2__
+  bool crSeen = false;
+#endif
+
   /* FIXME: find a way to support multifile locations, and only open once each
      file. That would make the procedure future-proof.  */
   if (! (caret_info.source
+#ifdef __OS2__
+         || (caret_info.source = fopen (loc.start.file, "rb")))
+#else
          || (caret_info.source = fopen (loc.start.file, "r")))
+#endif
       || loc.start.column == -1 || loc.start.line == -1)
     return;
 
@@ -194,7 +202,14 @@ location_caret (location loc, FILE *out)
         /* Quote the file, indent by a single column.  */
         putc (' ', out);
         do
+#ifdef __OS2__
+          if (c != '\r')
+            putc (c, out);
+          else
+            crSeen = true;
+#else
           putc (c, out);
+#endif
         while ((c = getc (caret_info.source)) != EOF && c != '\n');
         putc ('\n', out);
 
@@ -204,6 +219,11 @@ location_caret (location loc, FILE *out)
             ? ftell (caret_info.source) - caret_info.offset
             : loc.end.column;
           int i;
+
+#ifdef __OS2__
+          if (crSeen && loc.start.line != loc.end.line)
+            len -= 1;
+#endif
 
           /* Print the carets (at least one), with the same indent as above.*/
           fprintf (out, " %*s", loc.start.column - 1, "");

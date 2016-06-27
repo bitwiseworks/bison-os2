@@ -1423,7 +1423,7 @@ AT_PARSER_CHECK([[./input --debug > stdout.txt 2> stderr.txt]], [[1]])
 
 # Make sure syntax error doesn't forget that 'a' is expected.  It would
 # be forgotten without lookahead correction.
-AT_CHECK([[grep 'syntax error,' stderr.txt]], [[0]],
+AT_CHECK([[grep -U 'syntax error,' stderr.txt]], [[0]],
 [[syntax error, unexpected 'c', expecting 'a' or 'b'
 ]])
 

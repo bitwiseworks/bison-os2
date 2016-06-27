@@ -286,7 +286,7 @@ m4_pushdef([AT_TEST],
 AT_KEYWORDS([[graph]])
 AT_DATA([[input.y]], [$2])
 AT_BISON_CHECK([[-rall --graph input.y]], [0], [[]], [[ignore]])
-AT_CHECK([[grep -v // input.dot]], [0],
+AT_CHECK([[grep -vU // input.dot]], [0],
 [[
 digraph "input.y"
 {

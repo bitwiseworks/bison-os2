@@ -1438,7 +1438,7 @@ dnl LALR1-DIFF not used for canonical LR(1) because the diff is huge.
 
 dnl OTHER-CHECKS
 [AT_COND_CASE([[canonical LR]], [[]],
-[AT_CHECK([[grep '^State.*conflicts:' input.output]], [[0]],
+[AT_CHECK([[grep -U '^State.*conflicts:' input.output]], [[0]],
 [[State 64 conflicts: 14 shift/reduce
 State 164 conflicts: 1 shift/reduce
 State 201 conflicts: 33 shift/reduce, 4 reduce/reduce
