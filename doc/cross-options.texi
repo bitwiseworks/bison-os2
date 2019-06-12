@@ -4,14 +4,14 @@
 
 @item @option{--define=@var{name}[=@var{value}]}
 @tab @option{-D @var{name}[=@var{value}]}
-@tab @code{%define @var{name} ["@var{value}"]}
+@tab @code{%define @var{name} [@var{value}]}
 
 @item @option{--defines[=@var{file}]}
 @tab @option{-d}
 @tab @code{%defines [@var{"file"}]}
 
-@item @option{--feature[=@var{feature}]}
-@tab @option{-f [@var{feature}]}
+@item @option{--feature[=@var{features}]}
+@tab @option{-f [@var{features}]}
 @tab
 
 @item @option{--file-prefix=@var{prefix}}
@@ -20,7 +20,7 @@
 
 @item @option{--force-define=@var{name}[=@var{value}]}
 @tab @option{-F @var{name}[=@var{value}]}
-@tab @code{%define @var{name} ["@var{value}"]}
+@tab @code{%define @var{name} [@var{value}]}
 
 @item @option{--graph[=@var{file}]}
 @tab @option{-g [@var{file}]}
@@ -73,6 +73,10 @@
 @item @option{--token-table}
 @tab @option{-k}
 @tab @code{%token-table}
+
+@item @option{--update}
+@tab @option{-u}
+@tab
 
 @item @option{--verbose}
 @tab @option{-v}

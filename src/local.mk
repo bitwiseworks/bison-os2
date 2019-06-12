@@ -1,23 +1,28 @@
-# Copyright (C) 2001-2015 Free Software Foundation, Inc.
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+## Copyright (C) 2001-2015, 2018-2019 Free Software Foundation, Inc.
+##
+## This program is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-LDADD = lib/libbison.a $(LIBINTL)
+CLEANDIRS += %D%/*.dSYM
 
 bin_PROGRAMS = src/bison
 # Prettify Automake-computed names of compiled objects.
 src_bison_SHORTNAME = bison
+
+src_bison_CPPFLAGS = $(AM_CPPFLAGS) -DINSTALLDIR=\"$(bindir)\"
+if RELOCATABLE_VIA_LD
+  src_bison_LDFLAGS = `$(RELOCATABLE_LDFLAGS) $(bindir)`
+endif
 
 src_bison_CFLAGS = $(AM_CFLAGS) $(WERROR_CFLAGS)
 src_bison_SOURCES =                             \
@@ -25,8 +30,6 @@ src_bison_SOURCES =                             \
   src/AnnotationList.h                          \
   src/InadequacyList.c                          \
   src/InadequacyList.h                          \
-  src/LR0.c                                     \
-  src/LR0.h                                     \
   src/Sbitset.c                                 \
   src/Sbitset.h                                 \
   src/assoc.c                                   \
@@ -41,6 +44,8 @@ src_bison_SOURCES =                             \
   src/derives.h                                 \
   src/files.c                                   \
   src/files.h                                   \
+  src/fixits.c                                  \
+  src/fixits.h                                  \
   src/flex-scanner.h                            \
   src/getargs.c                                 \
   src/getargs.h                                 \
@@ -48,12 +53,14 @@ src_bison_SOURCES =                             \
   src/gram.h                                    \
   src/graphviz.c                                \
   src/graphviz.h                                \
-  src/lalr.c                                    \
-  src/lalr.h                                    \
   src/ielr.c                                    \
   src/ielr.h                                    \
+  src/lalr.c                                    \
+  src/lalr.h                                    \
   src/location.c                                \
   src/location.h                                \
+  src/lr0.c                                     \
+  src/lr0.h                                     \
   src/main.c                                    \
   src/muscle-tab.c                              \
   src/muscle-tab.h                              \
@@ -64,12 +71,12 @@ src_bison_SOURCES =                             \
   src/output.c                                  \
   src/output.h                                  \
   src/parse-gram.y                              \
+  src/print-graph.c                             \
+  src/print-graph.h                             \
   src/print-xml.c                               \
   src/print-xml.h                               \
   src/print.c                                   \
   src/print.h                                   \
-  src/print_graph.c                             \
-  src/print_graph.h                             \
   src/reader.c                                  \
   src/reader.h                                  \
   src/reduce.c                                  \
@@ -106,20 +113,31 @@ BUILT_SOURCES +=                                \
   src/scan-gram.c                               \
   src/scan-skel.c
 
+# Although conceptually most of these guys would make more sense in the
+# definition of libbison, beware that they might expand as flags such as
+# `-lm`.  Keep them here.  Or use a Libtool convenience library.
+src_bison_LDADD =                               \
+  $(ISNAND_LIBM)                                \
+  $(ISNANF_LIBM)                                \
+  $(ISNANL_LIBM)                                \
+  $(LDEXPL_LIBM)                                \
+  $(LDEXP_LIBM)                                 \
+  $(LIBINTL)                                    \
+  $(LIBTHREAD)                                  \
+  $(LIB_CLOCK_GETTIME)                          \
+  $(LIB_GETHRXTIME)                             \
+  $(LIBTEXTSTYLE)                               \
+  lib/libbison.a
+
+
+
 
 ## ------ ##
 ## yacc.  ##
 ## ------ ##
 
 if ENABLE_YACC
-bin_SCRIPTS = src/yacc
+  nodist_bin_SCRIPTS = src/yacc
 endif
 EXTRA_SCRIPTS = src/yacc
 MOSTLYCLEANFILES += src/yacc
-
-src/yacc:
-	$(AM_V_GEN)rm -f $@ $@.tmp
-	$(AM_V_at)echo '#! /bin/sh' >$@.tmp
-	$(AM_V_at)echo "exec '$(bindir)/bison' -y "'"$$@"' >>$@.tmp
-	$(AM_V_at)chmod a+x $@.tmp
-	$(AM_V_at)mv $@.tmp $@

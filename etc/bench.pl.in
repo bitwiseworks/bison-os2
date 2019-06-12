@@ -1,6 +1,7 @@
 #! /usr/bin/perl -w
 
-# Copyright (C) 2006, 2008-2015 Free Software Foundation, Inc.
+# Copyright (C) 2006, 2008-2015, 2018-2019 Free Software Foundation,
+# Inc.
 #
 # This file is part of Bison, the GNU Compiler Compiler.
 #
@@ -53,7 +54,7 @@ will generate eight different cases.
 
 =item B<-b>, B<--bench>
 
-Predefined benches, that is, combimation between a grammar and a I<directives>
+Predefined benches, that is, combination between a grammar and a I<directives>
 request.
 
 =over 4
@@ -738,7 +739,7 @@ yy::parser::token_type yylex(yy::parser::semantic_type* yylvalp,
 void
 yy::parser::error(const yy::parser::location_type& loc, const std::string& msg)
 {
-  std::cerr << loc << ": " << msg << std::endl;
+  std::cerr << loc << ": " << msg << '\n';
 }
 
 int main(int argc, char *argv[])

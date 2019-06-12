@@ -1,6 +1,6 @@
 # Checking Java Push Parsing.                            -*- Autotest -*-
 
-# Copyright (C) 2013-2015 Free Software Foundation, Inc.
+# Copyright (C) 2013-2015, 2018-2019 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,8 +44,8 @@ AT_BANNER([[Java Push Parsing Tests]])
 # This is missing main(), so two versions
 # are instantiated with different main() procedures.
 m4_define([AT_TRIVIAL_GRAMMAR],[
-%define parser_class_name {YYParser}
-%error-verbose
+%define api.parser.class {YYParser}
+%define parse.error verbose
 
 %code imports {
 import java.io.*;
@@ -59,7 +59,7 @@ start: 'a' 'b' 'c' ;
 %%
 ])
 
-# Define comon code across to be includede in
+# Define comon code across to be included in
 # class Main for the trivial parser tests.
 m4_define([AT_TRIVIAL_COMMON],[
   static class YYerror implements YYParser.Lexer
@@ -241,10 +241,13 @@ m4_define([AT_CALC_BODY],[
   static StringReader
   getinput(String filename) throws IOException
   {
-    StringBuilder buf = new StringBuilder();
+    // Yes, there are better alternatives to StringBuffer.  But we
+    // don't really care about performances here, while portability
+    // to older Java matters.
+    StringBuffer buf = new StringBuffer();
     FileReader file = new FileReader(filename);
     int c;
-    while ((c=file.read()) > 0)
+    while (0 < (c = file.read()))
       buf.append((char)c);
     file.close();
     return new StringReader(buf.toString());
@@ -270,8 +273,7 @@ input:
 
 line:
   '\n'
-| exp '\n'
-        {System.out.println("total = "+$[]1);}
+| exp '\n'    { System.out.println("total = "+$[]1); }
 | error '\n'
 ;
 
@@ -301,6 +303,13 @@ exp:
 | '-' error          { $[]$ = new Integer (0); return YYERROR;}
 ;
 ])
+
+
+
+## ------------------------------------- ##
+## Calc parser with api.push-pull both.  ##
+## ------------------------------------- ##
+
 
 # Test that the states transitioned by the push parser are the
 # same as for the pull parser.  This test is assumed to work
@@ -335,58 +344,56 @@ AT_DATA([input],[[1 + 2 * 3 = 7
 # Compose pieces to build the actual .y file.
 AT_DATA([Calc.y],[[/* Infix notation calculator--calc */
 %language "Java"
-%name-prefix "Calc"
-%define parser_class_name {Calc}
+
+%define api.parser.class {Calc}
 
 %code {
-static class UserLexer implements Calc.Lexer
-{
-  StreamTokenizer st;
-  StringReader rdr;
-
-  public UserLexer(StringReader reader)
+  static class UserLexer implements Calc.Lexer
   {
-    rdr = reader;
-    st = new StreamTokenizer(rdr);
-    st.resetSyntax();
-    st.eolIsSignificant(true);
-    st.whitespaceChars(9, 9);
-    st.whitespaceChars(32, 32);
-    st.wordChars(48, 57);
-  }
+    StreamTokenizer st;
+    StringReader rdr;
 
-  Integer yylval;
+    public UserLexer(StringReader reader)
+    {
+      rdr = reader;
+      st = new StreamTokenizer(rdr);
+      st.resetSyntax();
+      st.eolIsSignificant(true);
+      st.whitespaceChars(9, 9);
+      st.whitespaceChars(32, 32);
+      st.wordChars(48, 57);
+    }
 
-  public Object getLVal() { return yylval; }
+    Integer yylval;
 
-  public void yyerror(String msg) { System.err.println(msg); }
+    public Object getLVal() { return yylval; }
 
-  public int yylex () throws IOException
-  {
-    switch (st.nextToken()) {
-    case StreamTokenizer.TT_EOF: return EOF;
-    case StreamTokenizer.TT_EOL: return (int) '\n';
-    case StreamTokenizer.TT_WORD:
-        yylval = new Integer (st.sval);
-        return NUM;
-    default: return st.ttype;
+    public void yyerror(String msg) { System.err.println(msg); }
+
+    public int yylex () throws IOException
+    {
+      switch (st.nextToken()) {
+      case StreamTokenizer.TT_EOF: return EOF;
+      case StreamTokenizer.TT_EOL: return (int) '\n';
+      case StreamTokenizer.TT_WORD:
+          yylval = new Integer (st.sval);
+          return NUM;
+      default: return st.ttype;
+      }
     }
   }
 }
 
-}
-
 %code {
-public static void main (String[] argv)
-      throws IOException
-{
-    StringReader reader = getinput(argv[0]);
-    UserLexer lexer = new UserLexer(reader);
-    Calc calc = new Calc(lexer);
-    calc.setDebugLevel(1);
-    calc.parse();
-}//main
-
+  public static void main (String[] argv)
+        throws IOException
+  {
+      StringReader reader = getinput(argv[0]);
+      UserLexer lexer = new UserLexer(reader);
+      Calc calc = new Calc(lexer);
+      calc.setDebugLevel(1);
+      calc.parse();
+  }//main
 }
 
 ]AT_CALC_BODY[
@@ -577,8 +584,9 @@ Stack now 0 7 15
 ]])
 
 AT_BISON_CHECK([PUSHPULLFLAG [-o Calc.java Calc.y]])
+
 AT_JAVA_COMPILE([[Calc.java]])
-#Verify that this is a push parser.
+# Verify that this is a push parser.
 AT_CHECK_JAVA_GREP([[Calc.java]],
                    [[.*public void push_parse_initialize().*]])
 # Capture stderr output for comparison purposes.
@@ -593,6 +601,13 @@ AT_CHECK([[sed -e '/^Stack now.*$/p' -e d ./stderr]],
 AT_BISON_OPTION_POPDEFS
 AT_CLEANUP
 
+
+
+## ---------------------------------------------------------------- ##
+## Calc parser with %locations %code lexer and api.push-pull both.  ##
+## ---------------------------------------------------------------- ##
+
+
 # This test looks for location reporting by looking
 # at the lexer output with locations enabled.
 # It defines a lexer that reports location info.
@@ -601,8 +616,8 @@ AT_BISON_OPTION_PUSHDEFS
 
 AT_DATA([Calc.y],[[/* Infix notation calculator--calc.  */
 %language "Java"
-%name-prefix "Calc"
-%define parser_class_name {Calc}
+
+%define api.parser.class {Calc}
 %lex-param { Reader rdr }
 %locations
 
@@ -655,40 +670,17 @@ AT_DATA([Calc.y],[[/* Infix notation calculator--calc.  */
   }
 }
 
-%code {
-class Position {
-  public int line;
-  public int token;
-
-  public Position () { line = 0; token = 0; }
-
-  public Position (int l, int t) { line = l; token = t; }
-
-  public boolean equals (Position l)
-  {
-    return l.line == line && l.token == token;
-  }
-
-  public String toString ()
-  {
-    return Integer.toString(line)  + "." + Integer.toString(token);
-  }
-
-  public int lineno () { return line; }
-
-  public int token () { return token; }
-}//Class Position
-}
+%code { ]AT_JAVA_POSITION_DEFINE[ }
 
 %code {
-public static void main (String[] argv)
-        throws IOException
-{
-  StringReader reader = getinput(argv[0]);
-  Calc calc = new Calc(reader);
-  calc.setDebugLevel(1);
-  calc.parse();
-}
+  public static void main (String[] argv)
+          throws IOException
+  {
+    StringReader reader = getinput(argv[0]);
+    Calc calc = new Calc(reader);
+    calc.setDebugLevel(1);
+    calc.parse();
+  }
 }
 
 ]AT_CALC_BODY[

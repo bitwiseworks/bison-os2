@@ -1,7 +1,7 @@
 /* Declaration for error-reporting function for Bison.
 
-   Copyright (C) 2000-2002, 2006, 2009-2015 Free Software Foundation,
-   Inc.
+   Copyright (C) 2000-2002, 2006, 2009-2015, 2018-2019 Free Software
+   Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,20 @@
 
 /* Sub-messages indent. */
 # define SUB_INDENT (4)
+
+/*---------------.
+| Error stream.  |
+`---------------*/
+
+/** Enable a style on \a out provided it's stderr.  */
+void begin_use_class (const char *style, FILE *out);
+
+/** Disable a style on \a out provided it's stderr.  */
+void end_use_class (const char *style, FILE *out);
+
+/** Flush \a out.  */
+void flush (FILE *out);
+
 
 /*-------------.
 | --warnings.  |
@@ -76,10 +90,15 @@ void warnings_argmatch (char *args);
 /** Initialize this module.  */
 void complain_init (void);
 
+/** Reclaim resources.  */
+void complain_free (void);
+
+/** Initialize support for colored messages.  */
+void complain_init_color (void);
+
 typedef enum
   {
-    /**< Issue no warnings.  */
-    Wnone             = 0,
+    Wnone             = 0,       /**< Issue no warnings.  */
 
     Wmidrule_values   = 1 << warning_midrule_values,
     Wyacc             = 1 << warning_yacc,
@@ -106,6 +125,9 @@ typedef enum
     (Never enabled, never disabled). */
 bool warning_is_unset (warnings flags);
 
+/** Whether warnings of \a flags should be reported. */
+bool warning_is_enabled (warnings flags);
+
 /** Make a complaint, with maybe a location.  */
 void complain (location const *loc, warnings flags, char const *message, ...)
   __attribute__ ((__format__ (__printf__, 3, 4)));
@@ -120,13 +142,20 @@ void complain_indent (location const *loc, warnings flags, unsigned *indent,
   __attribute__ ((__format__ (__printf__, 4, 5)));
 
 
+/** GNU Bison extension not valid with POSIX Yacc.  */
+void bison_directive (location const *loc, char const *directive);
+
 /** Report an obsolete syntax, suggest the updated one.  */
 void deprecated_directive (location const *loc,
                            char const *obsolete, char const *updated);
 
-/** Report a repeated directive for a rule.  */
+/** Report a repeated directive.  */
 void duplicate_directive (char const *directive,
                           location first, location second);
+
+/** Report a repeated directive for a rule.  */
+void duplicate_rule_directive (char const *directive,
+                               location first, location second);
 
 /** Warnings treated as errors shouldn't stop the execution as regular
     errors should (because due to their nature, it is safe to go

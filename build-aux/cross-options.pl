@@ -35,7 +35,7 @@ while (<STDIN>)
             $arg =~ s/^=//;
             $arg = lc ($arg);
             my $dir_arg = $arg;
-            # If the argument is compite (e.g., for --define[=NAME[=VALUE]]),
+            # If the argument is complete (e.g., for --define[=NAME[=VALUE]]),
             # put each word in @var, to build @var{name}[=@var{value}], not
             # @var{name[=value]}].
             $arg =~ s/(\w+)/\@var{$1}/g;
@@ -48,7 +48,11 @@ while (<STDIN>)
             # are strings and have the same syntax as on the command line.
             if ($dir_arg eq 'name[=value]')
             {
-                $dir_arg = '@var{name} ["@var{value}"]';
+                # -D/-F do not add quotes to the argument.
+                $dir_arg =
+                    $dir eq "%define"
+                    ? '@var{name} [@var{value}]'
+                    : '@var{name} ["@var{value}"]';
             }
             else
             {

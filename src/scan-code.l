@@ -1,6 +1,6 @@
 /* Bison Action Scanner                             -*- C -*-
 
-   Copyright (C) 2006-2015 Free Software Foundation, Inc.
+   Copyright (C) 2006-2015, 2018-2019 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -21,24 +21,24 @@
 %option prefix="code_" outfile="lex.yy.c"
 
 %{
-/* Work around a bug in flex 2.5.31.  See Debian bug 333231
-   <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
-#undef code_wrap
-#define code_wrap() 1
+#include <c-ctype.h>
+#include <get-errno.h>
+#include <quote.h>
+
+#include <src/complain.h>
+#include <src/getargs.h>
+#include <src/muscle-tab.h>
+#include <src/reader.h>
+#include <src/scan-code.h>
+#include <src/symlist.h>
 
 #define FLEX_PREFIX(Id) code_ ## Id
 #include <src/flex-scanner.h>
 
-#include <src/complain.h>
-#include <src/reader.h>
-#include <src/getargs.h>
-#include <src/muscle-tab.h>
-#include <src/scan-code.h>
-#include <src/symlist.h>
-
-#include <c-ctype.h>
-#include <get-errno.h>
-#include <quote.h>
+/* Work around a bug in flex 2.5.31.  See Debian bug 333231
+   <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
+#undef code_wrap
+#define code_wrap() 1
 
 /* The current calling start condition: SC_RULE_ACTION or
    SC_SYMBOL_ACTION. */
@@ -57,8 +57,8 @@ static void handle_action_at (symbol_list *rule, char *cp, location at_loc);
 /* A string to be pushed to obstack after dollar/at has been handled. */
 static char *ref_tail_fields;
 
-static location the_location;
-static location *loc = &the_location;
+static location current_loc;
+static location *loc = &current_loc;
 
 /* A string representing the most recent translation.  */
 static char *last_string;
@@ -187,7 +187,7 @@ ref      -?[0-9]+|{id}|"["{id}"]"|"$"
   }
   "@$" {
     obstack_sgrow (&obstack_for_string, "]b4_at_dollar[");
-    muscle_percent_define_ensure("locations", the_location, true);
+    muscle_percent_define_ensure("locations", *loc, true);
   }
 }
 
@@ -215,10 +215,7 @@ is_dot_or_dash (char ch)
 static inline bool
 contains_dot_or_dash (const char* p)
 {
-  for (; *p; ++p)
-    if (is_dot_or_dash (*p))
-      return true;
-  return false;
+  return strpbrk(p, ".-");
 }
 
 /* Defines a variant of a symbolic name resolution. */
@@ -277,28 +274,21 @@ variant_table_free (void)
   variant_table_size = variant_count = 0;
 }
 
-static char *
-find_prefix_end (const char *prefix, char *begin, char *end)
+static char const *
+find_prefix_end (char const *prefix, char const *cp, char const *end)
 {
-  char *ptr = begin;
+  for (; *prefix && cp != end; ++prefix, ++cp)
+    if (*prefix != *cp)
+      return NULL;
 
-  for (; *prefix && ptr != end; ++prefix, ++ptr)
-    if (*prefix != *ptr)
-      return 0;
-
-  if (*prefix)
-    return 0;
-
-  return ptr;
+  return *prefix ? NULL : cp;
 }
 
 static variant *
 variant_add (uniqstr id, location id_loc, unsigned symbol_index,
-             char *cp, char *cp_end, bool explicit_bracketing)
+             char const *cp, char const *cp_end, bool explicit_bracketing)
 {
-  char *prefix_end;
-
-  prefix_end = find_prefix_end (id, cp, cp_end);
+  char const *prefix_end = find_prefix_end (id, cp, cp_end);
   if (prefix_end &&
       (prefix_end == cp_end ||
        (!explicit_bracketing && is_dot_or_dash (*prefix_end))))
@@ -340,8 +330,6 @@ show_sub_message (warnings warning,
                      var->id, at_spec);
   else
     {
-      static struct obstack msg_buf;
-      const char *tail = explicit_bracketing ? "" : cp + strlen (var->id);
       const char *id;
       location id_loc;
 
@@ -356,7 +344,10 @@ show_sub_message (warnings warning,
           id_loc = var->loc;
         }
 
+      const char *tail = explicit_bracketing ? "" : cp + strlen (var->id);
+
       /* Create the explanation message. */
+      static struct obstack msg_buf;
       obstack_init (&msg_buf);
 
       obstack_printf (&msg_buf, _("possibly meant: %c"), dollar_or_at);
@@ -380,7 +371,7 @@ show_sub_message (warnings warning,
 
       if (var->err & VARIANT_NOT_VISIBLE_FROM_MIDRULE)
         obstack_printf (&msg_buf,
-                        _(", cannot be accessed from mid-rule action at $%d"),
+                        _(", cannot be accessed from midrule action at $%d"),
                         midrule_rhs_index);
 
       complain_indent (&id_loc, warning, &indent, "%s",
@@ -395,9 +386,7 @@ show_sub_messages (warnings warning,
                    int midrule_rhs_index, char dollar_or_at,
                    unsigned indent)
 {
-  unsigned i;
-
-  for (i = 0; i < variant_count; ++i)
+  for (unsigned i = 0; i < variant_count; ++i)
     show_sub_message (warning | silent,
                       cp, explicit_bracketing,
                       midrule_rhs_index, dollar_or_at,
@@ -415,24 +404,17 @@ show_sub_messages (warnings warning,
 /* Parse named or positional reference. In case of positional
    references, can return negative values for $-n "deep" stack
    accesses. */
-static long int
+static long
 parse_ref (char *cp, symbol_list *rule, int rule_length,
            int midrule_rhs_index, char *text, location text_loc,
            char dollar_or_at)
 {
-  symbol_list *l;
-  char *cp_end;
-  bool explicit_bracketing;
-  unsigned i;
-  unsigned valid_variants = 0;
-  unsigned valid_variant_index = 0;
-
   if ('$' == *cp)
     return LHS_REF;
 
   if (c_isdigit (*cp) || (*cp == '-' && c_isdigit (* (cp + 1))))
     {
-      long int num = strtol (cp, &cp, 10);
+      long num = strtol (cp, &cp, 10);
       if (1 - INT_MAX + rule_length <= num && num <= rule_length)
         return num;
       else
@@ -443,46 +425,29 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
         }
     }
 
-  if ('[' == *cp)
-    {
-      /* Ignore the brackets. */
-      char *p;
-      for (p = ++cp; *p != ']'; ++p)
-        continue;
-      cp_end = p;
+  bool const explicit_bracketing = *cp == '[';
 
-      explicit_bracketing = true;
-    }
+  if (explicit_bracketing)
+    ++cp;
   else
-    {
-      /* Take all characters of the name. */
-      char* p;
-      for (p = cp; *p; ++p)
-        if (is_dot_or_dash (*p))
-          {
-            ref_tail_fields = p;
-            break;
-          }
-      for (p = cp; *p; ++p)
-        continue;
-      cp_end = p;
+    ref_tail_fields = strpbrk (cp, ".-");
 
-      explicit_bracketing = false;
-    }
+  char const *cp_end = strchr (cp, explicit_bracketing ? ']' : '\0');
 
   /* Add all relevant variants. */
   {
     unsigned symbol_index;
+    symbol_list *l;
     variant_count = 0;
     for (symbol_index = 0, l = rule; !symbol_list_null (l);
          ++symbol_index, l = l->next)
       {
-        variant *var;
         if (l->content_type != SYMLIST_SYMBOL)
           continue;
 
-        var = variant_add (l->content.sym->tag, l->sym_loc,
-                           symbol_index, cp, cp_end, explicit_bracketing);
+        variant *var
+          = variant_add (l->content.sym->tag, l->sym_loc,
+                         symbol_index, cp, cp_end, explicit_bracketing);
         if (var && l->named_ref)
           var->hidden_by = l->named_ref;
 
@@ -493,12 +458,14 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
   }
 
   /* Check errors. */
-  for (i = 0; i < variant_count; ++i)
+  unsigned valid_variants = 0;
+  unsigned valid_variant_index = 0;
+  for (unsigned i = 0; i < variant_count; ++i)
     {
       variant *var = &variant_table[i];
       unsigned symbol_index = var->symbol_index;
 
-      /* Check visibility from mid-rule actions. */
+      /* Check visibility from midrule actions. */
       if (midrule_rhs_index != 0
           && (symbol_index == 0 || midrule_rhs_index < symbol_index))
         var->err |= VARIANT_NOT_VISIBLE_FROM_MIDRULE;
@@ -540,12 +507,12 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
                              dollar_or_at);
           }
         else if (midrule_rhs_index)
-          complain_indent (&rule->location, complaint, &indent,
+          complain_indent (&rule->rhs_loc, complaint, &indent,
                            _("symbol not found in production before $%d: "
                              "%.*s"),
                            midrule_rhs_index, len, cp);
         else
-          complain_indent (&rule->location, complaint, &indent,
+          complain_indent (&rule->rhs_loc, complaint, &indent,
                            _("symbol not found in production: %.*s"),
                            len, cp);
 
@@ -630,11 +597,8 @@ fetch_type_name (char *cp, char const **type_name,
 static void
 handle_action_dollar (symbol_list *rule, char *text, location dollar_loc)
 {
-  char const *type_name = NULL;
-  char *cp = text + 1;
   symbol_list *effective_rule;
   int effective_rule_length;
-  int n;
 
   if (rule->midrule_parent_rule)
     {
@@ -647,13 +611,12 @@ handle_action_dollar (symbol_list *rule, char *text, location dollar_loc)
       effective_rule_length = symbol_list_length (rule->next);
     }
 
-  /* Get the type name if explicit. */
-  cp = fetch_type_name (cp, &type_name, dollar_loc);
-
-  n = parse_ref (cp, effective_rule, effective_rule_length,
-                 rule->midrule_parent_rhs_index, text, dollar_loc, '$');
-
-  /* End type_name. */
+  /* The type name if explicit, otherwise left null. */
+  char const *type_name = NULL;
+  char *cp = fetch_type_name (text + 1, &type_name, dollar_loc);
+  int n = parse_ref (cp, effective_rule, effective_rule_length,
+                     rule->midrule_parent_rhs_index, text, dollar_loc, '$');
+  /* End type_name.  Don't do it ealier: parse_ref depends on TEXT.  */
   if (type_name)
     cp[-1] = '\0';
 
@@ -663,56 +626,75 @@ handle_action_dollar (symbol_list *rule, char *text, location dollar_loc)
       break;
 
     case LHS_REF:
-      if (!type_name)
-        type_name = symbol_list_n_type_name_get (rule, 0);
+      {
+        symbol_list *sym = symbol_list_n_get (rule, 0);
+        if (!type_name
+            && !sym->content.sym->content->type_name)
+          {
+            if (union_seen || tag_seen)
+              {
+                if (rule->midrule_parent_rule)
+                  complain (&dollar_loc, complaint,
+                            _("$$ for the midrule at $%d of %s"
+                              " has no declared type"),
+                            rule->midrule_parent_rhs_index,
+                            quote (effective_rule->content.sym->tag));
+                else
+                  complain (&dollar_loc, complaint,
+                            _("$$ of %s has no declared type"),
+                            quote (rule->content.sym->tag));
+              }
+            else
+              untyped_var_seen = true;
+          }
 
-      if (!type_name)
-        {
-          if (union_seen | tag_seen)
-            {
-              if (rule->midrule_parent_rule)
-                complain (&dollar_loc, complaint,
-                             _("$$ for the midrule at $%d of %s"
-                               " has no declared type"),
-                             rule->midrule_parent_rhs_index,
-                             quote (effective_rule->content.sym->tag));
-              else
-                complain (&dollar_loc, complaint,
-                          _("$$ of %s has no declared type"),
-                          quote (rule->content.sym->tag));
-            }
-          else
-            untyped_var_seen = true;
-        }
-
-      obstack_sgrow (&obstack_for_string, "]b4_lhs_value(");
-      obstack_quote (&obstack_for_string, type_name);
-      obstack_sgrow (&obstack_for_string, ")[");
-      rule->action_props.is_value_used = true;
+        obstack_printf (&obstack_for_string, "]b4_lhs_value(orig %d, ",
+                        sym->content.sym->content->number);
+        obstack_quote (&obstack_for_string, type_name);
+        obstack_sgrow (&obstack_for_string, ")[");
+        rule->action_props.is_value_used = true;
+      }
       break;
 
+      /* Reference to a RHS symbol.  */
     default:
-      if (max_left_semantic_context < 1 - n)
-        max_left_semantic_context = 1 - n;
-      if (!type_name && 0 < n)
-        type_name = symbol_list_n_type_name_get (effective_rule, n);
-      if (!type_name)
-        {
-          if (union_seen | tag_seen)
-            complain (&dollar_loc, complaint,
-                      _("$%s of %s has no declared type"), cp,
-                      quote (effective_rule->content.sym->tag));
-          else
-            untyped_var_seen = true;
-        }
+      {
+        if (max_left_semantic_context < 1 - n)
+          max_left_semantic_context = 1 - n;
+        symbol_list *sym = 0 < n ? symbol_list_n_get (effective_rule, n) : NULL;
+        if (!type_name
+            && (!sym || !sym->content.sym->content->type_name))
+          {
+            if (union_seen || tag_seen)
+              complain (&dollar_loc, complaint,
+                        _("$%s of %s has no declared type"), cp,
+                        quote (effective_rule->content.sym->tag));
+            else
+              untyped_var_seen = true;
+          }
 
-      obstack_printf (&obstack_for_string,
-                      "]b4_rhs_value(%d, %d, ", effective_rule_length, n);
-      obstack_quote (&obstack_for_string, type_name);
-      obstack_sgrow (&obstack_for_string, ")[");
-      if (0 < n)
-        symbol_list_n_get (effective_rule, n)->action_props.is_value_used =
-          true;
+        obstack_printf (&obstack_for_string,
+                        "]b4_rhs_value(%d, %d, ",
+                        effective_rule_length, n);
+        if (sym)
+          obstack_printf (&obstack_for_string, "%s%d, ",
+                          sym->content.sym->content->class == nterm_sym ? "orig " : "",
+                          sym->content.sym->content->number);
+        else
+          obstack_sgrow (&obstack_for_string, "[], ");
+
+        obstack_quote (&obstack_for_string, type_name);
+        obstack_sgrow (&obstack_for_string, ")[");
+        if (0 < n)
+          {
+            if (muscle_percent_define_ifdef ("api.value.automove")
+                && sym->action_props.is_value_used)
+              complain (&dollar_loc, Wother,
+                        _("multiple occurrences of $%d with api.value.automove"),
+                        n);
+            sym->action_props.is_value_used = true;
+          }
+      }
       break;
     }
 }
@@ -726,10 +708,8 @@ handle_action_dollar (symbol_list *rule, char *text, location dollar_loc)
 static void
 handle_action_at (symbol_list *rule, char *text, location at_loc)
 {
-  char *cp = text + 1;
   symbol_list *effective_rule;
   int effective_rule_length;
-  int n;
 
   if (rule->midrule_parent_rule)
     {
@@ -744,8 +724,8 @@ handle_action_at (symbol_list *rule, char *text, location at_loc)
 
   muscle_percent_define_ensure("locations", at_loc, true);
 
-  n = parse_ref (cp, effective_rule, effective_rule_length,
-                       rule->midrule_parent_rhs_index, text, at_loc, '@');
+  int n = parse_ref (text + 1, effective_rule, effective_rule_length,
+                     rule->midrule_parent_rhs_index, text, at_loc, '@');
   switch (n)
     {
     case INVALID_REF:
@@ -767,13 +747,12 @@ handle_action_at (symbol_list *rule, char *text, location at_loc)
 | Initialize the scanner.  |
 `-------------------------*/
 
-/* Translate the dollars and ats in \a self, in the context \a sc_context
-   (SC_RULE_ACTION, SC_SYMBOL_ACTION, INITIAL).  */
+/* Translate the '$...' and '@...' in \a self, in the context \a
+   sc_context (SC_RULE_ACTION, SC_SYMBOL_ACTION, INITIAL).  */
 
 static char const *
 translate_action (code_props *self, int sc_context)
 {
-  char *res;
   static bool initialized = false;
   if (!initialized)
     {
@@ -784,7 +763,7 @@ translate_action (code_props *self, int sc_context)
 
   loc->start = loc->end = self->location.start;
   yy_switch_to_buffer (yy_scan_string (self->code));
-  res = code_lex (self, sc_context);
+  char *res = code_lex (self, sc_context);
   yy_delete_buffer (YY_CURRENT_BUFFER);
 
   return res;
@@ -825,7 +804,8 @@ code_props_symbol_action_init (code_props *self, char const *code,
 void
 code_props_rule_action_init (code_props *self, char const *code,
                              location code_loc, symbol_list *rule,
-                             named_ref *name, bool is_predicate)
+                             named_ref *name, uniqstr type,
+                             bool is_predicate)
 {
   code_props_none_init (self);
   self->kind = CODE_PROPS_RULE_ACTION;
@@ -833,6 +813,7 @@ code_props_rule_action_init (code_props *self, char const *code,
   self->location = code_loc;
   self->rule = rule;
   self->named_ref = name;
+  self->type = type;
   self->is_predicate = is_predicate;
 }
 
@@ -841,17 +822,17 @@ code_props_translate_code (code_props *self)
 {
   switch (self->kind)
     {
-      case CODE_PROPS_NONE:
-        break;
-      case CODE_PROPS_PLAIN:
-        self->code = translate_action (self, INITIAL);
-        break;
-      case CODE_PROPS_SYMBOL_ACTION:
-        self->code = translate_action (self, SC_SYMBOL_ACTION);
-        break;
-      case CODE_PROPS_RULE_ACTION:
-        self->code = translate_action (self, SC_RULE_ACTION);
-        break;
+    case CODE_PROPS_NONE:
+      break;
+    case CODE_PROPS_PLAIN:
+      self->code = translate_action (self, INITIAL);
+      break;
+    case CODE_PROPS_SYMBOL_ACTION:
+      self->code = translate_action (self, SC_SYMBOL_ACTION);
+      break;
+    case CODE_PROPS_RULE_ACTION:
+      self->code = translate_action (self, SC_RULE_ACTION);
+      break;
     }
 }
 

@@ -1,55 +1,72 @@
 # Japanese message for GNU bison
-# Copyright (C) 2001, 2012 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2012, 2018 Free Software Foundation, Inc.
 # This file is distributed under the same license as the bison package.
 # Daisuke Yamashita <yamad@mb.infoweb.ne.jp>, 2001.
 # Yasuaki Taniguchi <yasuakit@gmail.com>, 2010
-# Takeshi Hamasaki <hmatrjp@users.sourceforge.jp>, 2012
+# Takeshi Hamasaki <hmatrjp@users.sourceforge.jp>, 2012, 2018
 msgid ""
 msgstr ""
-"Project-Id-Version: GNU bison 2.5.1\n"
+"Project-Id-Version: GNU bison 3.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-23 13:55+0100\n"
-"PO-Revision-Date: 2012-06-10 18:47+0900\n"
+"POT-Creation-Date: 2019-05-22 07:29+0200\n"
+"PO-Revision-Date: 2018-08-30 10:41+0900\n"
 "Last-Translator: Takeshi Hamasaki <hmatrjp@users.sourceforge.jp>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 2.1.1\n"
 
-#: src/complain.c:322
-msgid "fatal error"
-msgstr "致命的エラー"
-
-#: src/complain.c:323
-#, fuzzy
-msgid "error"
-msgstr "エラー"
-
-#: src/complain.c:324
+#: src/complain.c:236
 msgid "warning"
 msgstr "警告"
 
-#: src/complain.c:387
-#, fuzzy, c-format
+#: src/complain.c:238
+msgid "error"
+msgstr "エラー"
+
+#: src/complain.c:240
+msgid "fatal error"
+msgstr "致命的エラー"
+
+#: src/complain.c:525
+#, c-format
+msgid "POSIX Yacc does not support %s"
+msgstr ""
+
+#: src/complain.c:533
+#, c-format
 msgid "deprecated directive, use %s"
-msgstr "警告: 未定義の変数 `%.*s'"
+msgstr "非推奨の指示です、%s を使ってください"
 
-#: src/complain.c:391
-#, fuzzy, c-format
+#: src/complain.c:537
+#, c-format
 msgid "deprecated directive: %s, use %s"
-msgstr "警告: 未定義の変数 `%.*s'"
+msgstr "非推奨の指示です:%s 、 %s を使ってください"
 
-#: src/complain.c:400
+#: src/complain.c:550
 #, fuzzy, c-format
-msgid "only one %s allowed per rule"
-msgstr "一つの条件部につき一つしか `else' を使えません"
+msgid "duplicate directive"
+msgstr "非推奨の指示です、%s を使ってください"
 
-#: src/complain.c:402 src/reader.c:140 src/symtab.c:253 src/symtab.c:266
+#: src/complain.c:552
 #, fuzzy, c-format
+msgid "duplicate directive: %s"
+msgstr "非推奨の指示です、%s を使ってください"
+
+#: src/complain.c:554 src/complain.c:567 src/reader.c:136 src/symtab.c:288
+#: src/symtab.c:301
+#, c-format
 msgid "previous declaration"
-msgstr "スコープの宣言"
+msgstr "以前の宣言"
+
+#: src/complain.c:564
+#, c-format
+msgid "only one %s allowed per rule"
+msgstr "一つの条件部につき一つしか %s を使えません"
 
 #: src/conflicts.c:77
 #, fuzzy, c-format
@@ -66,89 +83,104 @@ msgstr "状態 %d の規則 %d とトークン %s の競合を%sとして解決�
 msgid "    Conflict between rule %d and token %s resolved as an error"
 msgstr "状態 %d の規則 %d とトークン %s の競合を%sとして解決。\n"
 
-#: src/conflicts.c:530
+#: src/conflicts.c:597
 #, c-format
 msgid "State %d "
 msgstr "状態 %d "
 
-#: src/conflicts.c:533
+#: src/conflicts.c:600
 #, fuzzy, c-format
 msgid "conflicts: %d shift/reduce, %d reduce/reduce\n"
 msgstr "変化記号を半音低くする"
 
-#: src/conflicts.c:536
+#: src/conflicts.c:603
 #, fuzzy, c-format
 msgid "conflicts: %d shift/reduce\n"
 msgstr "変化記号を半音低くする"
 
-#: src/conflicts.c:538
+#: src/conflicts.c:605
 #, fuzzy, c-format
 msgid "conflicts: %d reduce/reduce\n"
 msgstr "発光を減らす(_L)"
 
-#: src/conflicts.c:569
+#: src/conflicts.c:641
+#, c-format
+msgid "shift/reduce conflicts for rule %d: %d found, %d expected"
+msgstr ""
+
+#: src/conflicts.c:647
+#, c-format
+msgid "reduce/reduce conflicts for rule %d: %d found, %d expected"
+msgstr ""
+
+#: src/conflicts.c:665
 #, c-format
 msgid "%%expect-rr applies only to GLR parsers"
 msgstr ""
 
-#: src/conflicts.c:586
+#: src/conflicts.c:682
 #, c-format
 msgid "shift/reduce conflicts: %d found, %d expected"
 msgstr ""
 
-#: src/conflicts.c:591
+#: src/conflicts.c:687
 #, fuzzy, c-format
 msgid "%d shift/reduce conflict"
 msgid_plural "%d shift/reduce conflicts"
 msgstr[0] "本来 %d 個のシフト/還元衝突であるはずです\n"
 
-#: src/conflicts.c:608
+#: src/conflicts.c:704
 #, c-format
 msgid "reduce/reduce conflicts: %d found, %d expected"
 msgstr ""
 
-#: src/conflicts.c:613
+#: src/conflicts.c:709
 #, fuzzy, c-format
 msgid "%d reduce/reduce conflict"
 msgid_plural "%d reduce/reduce conflicts"
 msgstr[0] "ホスト名の衝突\n"
 
-#: src/files.c:123
+#: src/files.c:125
 #, c-format
 msgid "%s: cannot open"
 msgstr "%s: 開くことができません"
 
-#: src/files.c:139
+#: src/files.c:141
 #, c-format
 msgid "input/output error"
 msgstr "入力/出力エラーです"
 
-#: src/files.c:142
+#: src/files.c:144
 #, c-format
 msgid "cannot close file"
 msgstr "ファイルを閉じることができません"
 
-#: src/files.c:372
+#: src/files.c:375
 #, fuzzy, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr " ファイルを上書きしようとした際, 再取得に失敗しました"
 
-#: src/files.c:382
-#, fuzzy, c-format
+#: src/files.c:383
+#, c-format
 msgid "conflicting outputs to file %s"
-msgstr "リモートファイルへの参照"
+msgstr "ファイル %s への出力が衝突しています"
 
-#: src/getargs.c:252
+#: src/fixits.c:122
 #, fuzzy, c-format
+msgid "%s: cannot backup"
+msgstr "%s: 開くことができません"
+
+#: src/getargs.c:266
+#, c-format
 msgid "Try '%s --help' for more information.\n"
 msgstr "`%s --help' で詳細情報を参照してください\n"
 
-#: src/getargs.c:261
+#: src/getargs.c:275
 #, c-format
 msgid "Usage: %s [OPTION]... FILE\n"
 msgstr "使い方: %s [オプション]... ファイル\n"
 
-#: src/getargs.c:262
+#: src/getargs.c:276
 msgid ""
 "Generate a deterministic LR or generalized LR (GLR) parser employing\n"
 "LALR(1), IELR(1), or canonical LR(1) parser tables.  IELR(1) and\n"
@@ -156,17 +188,16 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/getargs.c:269
-#, fuzzy
+#: src/getargs.c:283
 msgid ""
 "Mandatory arguments to long options are mandatory for short options too.\n"
 msgstr "長いオプションに必須の引数は短いオプションにも必須です.\n"
 
-#: src/getargs.c:272
+#: src/getargs.c:286
 msgid "The same is true for optional arguments.\n"
 msgstr "オプションの引数についても同様です。\n"
 
-#: src/getargs.c:276
+#: src/getargs.c:290
 msgid ""
 "\n"
 "Operation modes:\n"
@@ -174,14 +205,18 @@ msgid ""
 "  -V, --version              output version information and exit\n"
 "      --print-localedir      output directory containing locale-dependent "
 "data\n"
+"                             and exit\n"
 "      --print-datadir        output directory containing skeletons and XSLT\n"
+"                             and exit\n"
+"  -u, --update               apply fixes to the source grammar file and "
+"exit\n"
 "  -y, --yacc                 emulate POSIX Yacc\n"
 "  -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n"
-"  -f, --feature[=FEATURE]    activate miscellaneous features\n"
+"  -f, --feature[=FEATURES]   activate miscellaneous features\n"
 "\n"
 msgstr ""
 
-#: src/getargs.c:289
+#: src/getargs.c:306
 #, fuzzy, c-format
 msgid ""
 "Parser:\n"
@@ -198,15 +233,19 @@ msgid ""
 "  -k, --token-table                include a table of token names\n"
 msgstr ""
 "構文解析器:\n"
+"  -L, --language=LANGUAGE          specify the output programming language\n"
 "  -S, --skeleton=FILE        利用するスケルトンを指定する\n"
 "  -t, --debug                構文解析のデバッグ用の手段\n"
+"                                  same as '-Dparse.trace'\n"
 "      --locations            計算結果位置を有効にする\n"
+"  -D, --define=NAME[=VALUE]        similar to '%define NAME \"VALUE\"'\n"
+"  -F, --force-define=NAME[=VALUE]  override '%define NAME \"VALUE\"'\n"
 "  -p, --name-prefix=PREFIX   PREFIX を外部シンボルとして先頭に挿入する\n"
+"                                   deprecated by '-Dapi.prefix=PREFIX'\n"
 "  -l, --no-lines             `#line' ディレクティブを生成しない\n"
-"  -n, --no-parser            テーブルのみを生成する\n"
 "  -k, --token-table          トークン名のテーブルを含める\n"
 
-#: src/getargs.c:307
+#: src/getargs.c:324
 msgid ""
 "Output:\n"
 "      --defines[=FILE]       also produce a header file\n"
@@ -222,17 +261,17 @@ msgid ""
 "                             (the XML schema is experimental)\n"
 msgstr ""
 
-#: src/getargs.c:322
+#: src/getargs.c:339
 #, c-format
 msgid ""
 "Warning categories include:\n"
-"  'midrule-values'    unset or unused midrule values\n"
-"  'yacc'              incompatibilities with POSIX Yacc\n"
 "  'conflicts-sr'      S/R conflicts (enabled by default)\n"
 "  'conflicts-rr'      R/R conflicts (enabled by default)\n"
 "  'deprecated'        obsolete constructs\n"
 "  'empty-rule'        empty rules without %empty\n"
+"  'midrule-values'    unset or unused midrule values\n"
 "  'precedence'        useless precedence and associativity\n"
+"  'yacc'              incompatibilities with POSIX Yacc\n"
 "  'other'             all other warnings (enabled by default)\n"
 "  'all'               all the warnings except 'yacc'\n"
 "  'no-CATEGORY'       turn off warnings in CATEGORY\n"
@@ -240,7 +279,7 @@ msgid ""
 "  'error[=CATEGORY]'  treat warnings as errors\n"
 msgstr ""
 
-#: src/getargs.c:339
+#: src/getargs.c:356
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
 "  'state'        describe the states\n"
@@ -251,16 +290,23 @@ msgid ""
 "  'none'         disable the report\n"
 msgstr ""
 
-#: src/getargs.c:350
+#: src/getargs.c:367
 msgid ""
-"FEATURE is a list of comma separated words that can include:\n"
-"  'caret'        show errors with carets\n"
-"  'all'          all of the above\n"
-"  'none'         disable all of the above\n"
+"FEATURES is a list of comma separated words that can include:\n"
+"  'caret', 'diagnostics-show-caret'\n"
+"    show errors with carets\n"
+"  'fixit', 'diagnostics-parseable-fixits'\n"
+"    show machine-readable fixes\n"
+"  'syntax-only'\n"
+"    do not generate any file\n"
+"  'all'\n"
+"    all of the above\n"
+"  'none'\n"
+"    disable all of the above\n"
 "  "
 msgstr ""
 
-#: src/getargs.c:358
+#: src/getargs.c:382
 #, fuzzy, c-format
 msgid "Report bugs to <%s>.\n"
 msgstr ""
@@ -269,13 +315,12 @@ msgstr ""
 "翻訳に関するバグは<translation-team-ja@lists.sourceforge.net>に報告してくださ"
 "い。\n"
 
-#: src/getargs.c:359
-#, fuzzy, c-format
+#: src/getargs.c:383
+#, c-format
 msgid "%s home page: <%s>.\n"
 msgstr "%s のホームページ: <%s>\n"
 
-#: src/getargs.c:360
-#, fuzzy
+#: src/getargs.c:384
 msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
 msgstr ""
 "GNU ソフトウェアを使用する際の一般的なヘルプ: <http://www.gnu.org/gethelp/>\n"
@@ -285,29 +330,29 @@ msgstr ""
 #. form one of the URLs at http://translationproject.org/team/.
 #. Otherwise, replace the entire URL with your translation team's
 #. email address.
-#: src/getargs.c:373
+#: src/getargs.c:399
 msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
 msgstr ""
 
-#: src/getargs.c:375
+#: src/getargs.c:402
 msgid "For complete documentation, run: info bison.\n"
 msgstr ""
 
-#: src/getargs.c:391
+#: src/getargs.c:418
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:393
+#: src/getargs.c:420
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Robert Corbett と Richard Stallman によって書かれました\n"
 
-#: src/getargs.c:397
+#: src/getargs.c:424
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright (C) %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:400
+#: src/getargs.c:427
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -318,36 +363,35 @@ msgstr ""
 "これはフリーソフトウェアです -- 複製についての条件はソースを見ましょう。\n"
 "一切の保証はありません -- 商業性や目的適合性についての保証すらありません。\n"
 
-#: src/getargs.c:422
-#, fuzzy, c-format
+#: src/getargs.c:449
+#, c-format
 msgid "multiple skeleton declarations are invalid"
-msgstr "%s が複数個宣言されました"
+msgstr "複数のスケルトンの宣言は無効です"
 
-#: src/getargs.c:440
+#: src/getargs.c:466
 #, c-format
 msgid "%s: invalid language"
 msgstr "%s: 無効な言語"
 
-#: src/getargs.c:443
-#, fuzzy
+#: src/getargs.c:469
 msgid "multiple language declarations are invalid"
-msgstr "%s が複数個宣言されました"
+msgstr "複数の言語の宣言は無効です"
 
-#: src/getargs.c:724
-#, c-format
-msgid "%s: missing operand"
+#: src/getargs.c:798
+#, fuzzy, c-format
+msgid "missing operand"
 msgstr "%s: オペランドがありません"
 
-#: src/getargs.c:726
+#: src/getargs.c:800
 #, c-format
 msgid "extra operand %s"
 msgstr "余分なオペランド %s"
 
-#: src/gram.c:185
+#: src/gram.c:218
 msgid "Grammar"
 msgstr "文法"
 
-#: src/graphviz.c:45
+#: src/graphviz.c:46
 #, c-format
 msgid ""
 "// Generated by %s.\n"
@@ -356,7 +400,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/location.c:93 src/scan-gram.l:932
+#: src/location.c:93 src/scan-gram.l:953
 #, c-format
 msgid "line number overflow"
 msgstr "行番号がオーバーフローしました"
@@ -366,220 +410,249 @@ msgstr "行番号がオーバーフローしました"
 msgid "column number overflow"
 msgstr "列番号がオーバーフローしました"
 
-#: src/main.c:146
+#: src/location.c:97
+#, fuzzy, c-format
+msgid "byte number overflow"
+msgstr "行番号がオーバーフローしました"
+
+#: src/main.c:155
 msgid "rule useless in parser due to conflicts"
 msgstr "衝突のせいでパーサ内の規則が使用できません"
 
-#: src/muscle-tab.c:514
+#: src/main.c:246
+#, c-format
+msgid "fix-its can be applied.  Rerun with option '--update'."
+msgstr ""
+
+#: src/muscle-tab.c:532
 #, fuzzy, c-format
 msgid "%%define variable %s redefined"
 msgstr "変数インデックスが不正です"
 
-#: src/muscle-tab.c:518
-#, fuzzy, c-format
+#: src/muscle-tab.c:536 src/symtab.c:316
+#, c-format
 msgid "previous definition"
-msgstr "前の定義がここにありました"
+msgstr "前の定義"
 
-#: src/muscle-tab.c:568 src/muscle-tab.c:669 src/muscle-tab.c:732
+#: src/muscle-tab.c:595 src/muscle-tab.c:696 src/muscle-tab.c:757
 #, fuzzy, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "警告: 未定義の変数 `%.*s'"
 
-#: src/muscle-tab.c:663
+#: src/muscle-tab.c:690
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr ""
 
-#: src/muscle-tab.c:717
+#: src/muscle-tab.c:744
 #, fuzzy, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "アイコン型として不適切な値 '%s'"
 
-#: src/muscle-tab.c:722
+#: src/muscle-tab.c:749
 #, fuzzy, c-format
 msgid "accepted value: %s"
 msgstr "無効な値\n"
 
-#: src/parse-gram.y:811
+#: src/parse-gram.y:738
+msgid "character literals cannot be nonterminals"
+msgstr ""
+
+#: src/parse-gram.y:870
 #, fuzzy, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "マクロ仮引数リストに ')' がありません"
 
-#: src/print.c:47
-#, c-format
-msgid " type %d is %s\n"
-msgstr " タイプ %d は %s です\n"
+#: src/parse-gram.y:973 src/parse-gram.y:981
+#, fuzzy, c-format
+msgid "invalid version requirement: %s"
+msgstr "引数 `%3$s' に対して %1$s%2$s が無効です"
 
-#: src/print.c:167
+#: src/parse-gram.y:994
+#, c-format
+msgid "require bison %s, but have %s"
+msgstr ""
+
+#: src/print-graph.c:62 src/print.c:345
+#, c-format
+msgid "State %d"
+msgstr "状態 %d"
+
+#: src/print.c:136
 #, fuzzy, c-format
 msgid "shift, and go to state %d\n"
 msgstr "    %-4s\tシフト、および状態 %d へ\n"
 
-#: src/print.c:169
-#, fuzzy, c-format
+#: src/print.c:138
+#, c-format
 msgid "go to state %d\n"
-msgstr "先頭に移動"
+msgstr "状態 %d に移行\n"
 
-#: src/print.c:206
+#: src/print.c:173
 #, fuzzy
 msgid "error (nonassociative)\n"
 msgstr "%s サブプロセス入出力エラー"
 
-#: src/print.c:229
+#: src/print.c:195
 #, fuzzy, c-format
 msgid "reduce using rule %d (%s)"
 msgstr " (\"%s\"からの規則, %d行)"
 
-#: src/print.c:231
+#: src/print.c:198
 #, fuzzy, c-format
 msgid "accept"
 msgstr "許可する(_A)"
 
-#: src/print.c:267 src/print.c:341
+#: src/print.c:235 src/print.c:309
 #, fuzzy
 msgid "$default"
 msgstr "デフォルト"
 
-#: src/print.c:377 src/print_graph.c:61
-#, fuzzy, c-format
-msgid "State %d"
-msgstr "状態 %d "
-
-#: src/print.c:413
+#: src/print.c:364
 msgid "Terminals, with rules where they appear"
 msgstr "出現位置の規則による終端"
 
-#: src/print.c:440
+#: src/print.c:391
 msgid "Nonterminals, with rules where they appear"
 msgstr "出現位置の規則による非終端"
 
-#: src/print.c:469
-#, c-format
-msgid " on left:"
+#: src/print.c:416
+#, fuzzy
+msgid "on left:"
 msgstr " 左辺:"
 
-#: src/print.c:486
-#, c-format
-msgid " on right:"
+#: src/print.c:425
+#, fuzzy
+msgid "on right:"
 msgstr " 右辺:"
 
-#: src/print.c:514
+#: src/print.c:447
 msgid "Rules useless in parser due to conflicts"
 msgstr "衝突のせいでパーサ内の規則が使用できません"
 
-#: src/reader.c:62
+#: src/reader.c:60
 #, c-format
 msgid "multiple %s declarations"
 msgstr "%s が複数個宣言されました"
 
-#: src/reader.c:133
+#: src/reader.c:129
 #, fuzzy, c-format
 msgid "result type clash on merge function %s: <%s> != <%s>"
 msgstr "初期状態の動作では型 (`%s' `%s') が衝突します"
 
-#: src/reader.c:206
+#: src/reader.c:202
 #, c-format
 msgid "duplicated symbol name for %s ignored"
 msgstr "%s の重複するシンボル名を無視します"
 
-#: src/reader.c:250
+#: src/reader.c:242
 #, fuzzy, c-format
 msgid "rule given for %s, which is a token"
 msgstr "%s に規則が与えられ、それはトークンとなります"
 
-#: src/reader.c:306
+#: src/reader.c:299
 #, fuzzy, c-format
 msgid "type clash on default action: <%s> != <%s>"
 msgstr "初期状態の動作では型 (`%s' `%s') が衝突します"
 
-#: src/reader.c:312
+#: src/reader.c:322
 #, c-format
 msgid "empty rule for typed nonterminal, and no action"
 msgstr "空の型付き非終端アイテム用規則であり、動作が起りません"
 
-#: src/reader.c:329
-#, fuzzy, c-format
+#: src/reader.c:338
+#, c-format
 msgid "unused value: $%d"
-msgstr "無効な値\n"
+msgstr "使われていない値: $%d"
 
-#: src/reader.c:331
+#: src/reader.c:340
 #, fuzzy, c-format
 msgid "unset value: $$"
 msgstr "無効な値\n"
 
-#: src/reader.c:340
+#: src/reader.c:350
 #, c-format
 msgid "%%empty on non-empty rule"
 msgstr ""
 
-#: src/reader.c:346
+#: src/reader.c:360
 #, c-format
 msgid "empty rule without %%empty"
 msgstr ""
 
-#: src/reader.c:355
+#: src/reader.c:374
 #, fuzzy, c-format
 msgid "token for %%prec is not defined: %s"
 msgstr "トークン %s の値は適切な UTF-8 文字列ではありません"
 
-#: src/reader.c:473 src/reader.c:495
+#: src/reader.c:379
+#, c-format
+msgid "only midrule actions can be typed: %s"
+msgstr ""
+
+#: src/reader.c:506 src/reader.c:528 src/reader.c:599
 #, fuzzy, c-format
 msgid "%s affects only GLR parsers"
 msgstr "コード変換はテキスト型添付ファイルにのみ有効。"
 
-#: src/reader.c:476
-#, fuzzy, c-format
+#: src/reader.c:509
+#, c-format
 msgid "%s must be followed by positive number"
-msgstr "フィールド名 `%.*s' の後はコロンでなければなりません"
+msgstr "%s の後は正の数でなければなりません"
 
-#: src/reader.c:602
-#, fuzzy, c-format
+#: src/reader.c:564
+#, c-format
+msgid "POSIX Yacc does not support typed midrule actions"
+msgstr ""
+
+#: src/reader.c:669
+#, c-format
 msgid "rule is too long"
-msgstr "述部が長すぎます"
+msgstr "規則が長すぎます"
 
-#: src/reader.c:718
+#: src/reader.c:800
 #, c-format
 msgid "no rules in the input grammar"
 msgstr "入力した文法に規則が定義されていません"
 
-#: src/reduce.c:241
+#: src/reduce.c:225
 #, fuzzy
 msgid "rule useless in grammar"
 msgstr "入力した文法に規則が定義されていません"
 
-#: src/reduce.c:303
+#: src/reduce.c:280
 #, fuzzy, c-format
 msgid "nonterminal useless in grammar: %s"
 msgstr "入力した文法に規則が定義されていません"
 
-#: src/reduce.c:351
+#: src/reduce.c:321
 #, fuzzy
 msgid "Nonterminals useless in grammar"
 msgstr "入力した文法に規則が定義されていません"
 
-#: src/reduce.c:364
+#: src/reduce.c:333
 #, fuzzy
 msgid "Terminals unused in grammar"
 msgstr "入力した文法に規則が定義されていません"
 
-#: src/reduce.c:373
+#: src/reduce.c:342
 #, fuzzy
 msgid "Rules useless in grammar"
 msgstr "入力した文法に規則が定義されていません"
 
-#: src/reduce.c:386
+#: src/reduce.c:355
 #, fuzzy, c-format
 msgid "%d nonterminal useless in grammar"
 msgid_plural "%d nonterminals useless in grammar"
 msgstr[0] "入力した文法に規則が定義されていません"
 
-#: src/reduce.c:391
+#: src/reduce.c:360
 #, fuzzy, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
 msgstr[0] "入力した文法に規則が定義されていません"
 
-#: src/reduce.c:420
+#: src/reduce.c:386
 #, fuzzy, c-format
 msgid "start symbol %s does not derive any sentence"
 msgstr "開始シンボル %s はどの文にも由来しません"
@@ -589,596 +662,543 @@ msgstr "開始シンボル %s はどの文にも由来しません"
 msgid "stray '%s'"
 msgstr ""
 
-#: src/scan-code.l:339
+#: src/scan-code.l:329
 #, fuzzy, c-format
 msgid "refers to: %c%s at %s"
 msgstr "'%s' はディレクトリを指しています"
 
-#: src/scan-code.l:362
+#: src/scan-code.l:353
 #, fuzzy, c-format
 msgid "possibly meant: %c"
 msgstr "多分、カウントが間違っています。"
 
-#: src/scan-code.l:371
+#: src/scan-code.l:362
 #, fuzzy, c-format
 msgid ", hiding %c"
 msgstr "入/退出メッセージの制限"
 
-#: src/scan-code.l:379
+#: src/scan-code.l:370
 #, fuzzy, c-format
 msgid " at %s"
 msgstr "%s (%s) at "
 
-#: src/scan-code.l:383
+#: src/scan-code.l:374
 #, c-format
-msgid ", cannot be accessed from mid-rule action at $%d"
+msgid ", cannot be accessed from midrule action at $%d"
 msgstr ""
 
-#: src/scan-code.l:440 src/scan-gram.l:855
+#: src/scan-code.l:422 src/scan-gram.l:876
 #, c-format
 msgid "integer out of range: %s"
 msgstr "整数が値の範囲外です: %s"
 
-#: src/scan-code.l:530
+#: src/scan-code.l:497
 #, c-format
 msgid "invalid reference: %s"
 msgstr "無効な参照: %s"
 
-#: src/scan-code.l:538
+#: src/scan-code.l:505
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 "'%c' の後に文法エラーがあります。整数、文字、'_', '[','$' が来るはずです。"
 
-#: src/scan-code.l:544
+#: src/scan-code.l:511
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr ""
 
-#: src/scan-code.l:549
+#: src/scan-code.l:516
 #, fuzzy, c-format
 msgid "symbol not found in production: %.*s"
 msgstr "%s が gflares_list 中に見付かりません"
 
-#: src/scan-code.l:564
+#: src/scan-code.l:531
 #, fuzzy, c-format
 msgid "misleading reference: %s"
 msgstr "高度の単位"
 
-#: src/scan-code.l:580
-#, fuzzy, c-format
+#: src/scan-code.l:547
+#, c-format
 msgid "ambiguous reference: %s"
-msgstr "高度の単位"
+msgstr "曖昧な参照: \"%s"
 
-#: src/scan-code.l:616
+#: src/scan-code.l:583
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr ""
 
-#: src/scan-code.l:675
+#: src/scan-code.l:638
 #, fuzzy, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$%d 個の `%s' が宣言された型を持っていません"
 
-#: src/scan-code.l:681
+#: src/scan-code.l:644
 #, fuzzy, c-format
 msgid "$$ of %s has no declared type"
 msgstr "`%s' の $$ に宣言のない型があります"
 
-#: src/scan-code.l:703
+#: src/scan-code.l:670
 #, fuzzy, c-format
 msgid "$%s of %s has no declared type"
-msgstr "`%s' の $$ に宣言のない型があります"
+msgstr "$%$2s の %$1s に宣言のない型があります"
 
-#: src/scan-gram.l:186
+#: src/scan-code.l:693
+#, c-format
+msgid "multiple occurrences of $%d with api.value.automove"
+msgstr ""
+
+#: src/scan-gram.l:194
 #, c-format
 msgid "stray ',' treated as white space"
 msgstr ""
 
-#: src/scan-gram.l:276
-#, fuzzy, c-format
+#: src/scan-gram.l:291
+#, c-format
 msgid "invalid directive: %s"
-msgstr "無効な #%s 指示です"
+msgstr "無効な指示: %s"
 
-#: src/scan-gram.l:302
-#, fuzzy, c-format
+#: src/scan-gram.l:312
+#, c-format
 msgid "invalid identifier: %s"
-msgstr "不正なURN %1: 不適切な名前空間識別子"
+msgstr "無効な識別子: %s"
 
-#: src/scan-gram.l:354
-#, fuzzy
+#: src/scan-gram.l:364
 msgid "invalid character"
 msgid_plural "invalid characters"
-msgstr[0] "無効な文字: `%s'"
+msgstr[0] "無効な文"
 
-#: src/scan-gram.l:372
+#: src/scan-gram.l:382
 #, c-format
 msgid "invalid null character"
 msgstr "無効な null 文字"
 
-#: src/scan-gram.l:425
+#: src/scan-gram.l:436
 #, fuzzy, c-format
 msgid "unexpected identifier in bracketed name: %s"
 msgstr "識別子 \"%s\" は C++ の特別な演算子名です"
 
-#: src/scan-gram.l:447
-#, fuzzy, c-format
+#: src/scan-gram.l:458
+#, c-format
 msgid "an identifier expected"
-msgstr "識別子が期待されています."
+msgstr "識別子が期待されています"
 
-#: src/scan-gram.l:452
+#: src/scan-gram.l:463
 #, fuzzy
 msgid "invalid character in bracketed name"
 msgid_plural "invalid characters in bracketed name"
 msgstr[0] "無効なユーザ名 \"%s\" が %s:%d にあります。中断します"
 
-#: src/scan-gram.l:544
+#: src/scan-gram.l:534
+#, c-format
+msgid "POSIX Yacc does not support string literals"
+msgstr ""
+
+#: src/scan-gram.l:556
 #, c-format
 msgid "empty character literal"
 msgstr "空の文字定数"
 
-#: src/scan-gram.l:550
+#: src/scan-gram.l:562
 #, fuzzy, c-format
 msgid "extra characters in character literal"
 msgstr "リテラル中で null 文字が確保されました"
 
-#: src/scan-gram.l:596 src/scan-gram.l:606 src/scan-gram.l:626
+#: src/scan-gram.l:609 src/scan-gram.l:619 src/scan-gram.l:639
 #, fuzzy, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "-q= の後に番号が期待されますが、%s が与えられました\n"
 
-#: src/scan-gram.l:638
+#: src/scan-gram.l:651
 #, fuzzy, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "エスケープキャラクタを決定できません"
 
-#: src/scan-gram.l:984
+#: src/scan-gram.l:870
+#, c-format
+msgid "POSIX Yacc does not support hexadecimal literals"
+msgstr ""
+
+#: src/scan-gram.l:1006
 #, c-format
 msgid "missing %s at end of file"
 msgstr "ファイル末尾に %s がありません"
 
-#: src/scan-gram.l:995
+#: src/scan-gram.l:1017
 #, c-format
 msgid "missing %s at end of line"
 msgstr "行末に %s がありません"
 
-#: src/scan-skel.l:139
+#: src/scan-skel.l:140
 #, fuzzy, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr "文字列が命令の途中で終わっています."
 
-#: src/scan-skel.l:256
+#: src/scan-skel.l:257
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr ""
 
-#: src/scan-skel.l:263
+#: src/scan-skel.l:264
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr ""
 
-#: src/symtab.c:75
+#: src/symtab.c:100
 #, c-format
 msgid "POSIX Yacc forbids dashes in symbol names: %s"
 msgstr ""
 
-#: src/symtab.c:97
+#: src/symtab.c:110
 #, fuzzy, c-format
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr "シンボルが多すぎます (トークン + 非終端アイテム) -- 最大 %d"
 
-#: src/symtab.c:250
+#: src/symtab.c:285
 #, fuzzy, c-format
 msgid "%s redeclaration for %s"
 msgstr "\"%s\" のラベル:"
 
-#: src/symtab.c:263
+#: src/symtab.c:298
 #, fuzzy, c-format
 msgid "%s redeclaration for <%s>"
 msgstr "\"%s\" のラベル:"
 
-#: src/symtab.c:392
-#, c-format
-msgid "symbol %s redefined"
-msgstr "シンボル %s が再定義されました"
+#: src/symtab.c:310
+#, fuzzy, c-format
+msgid "symbol %s redeclared as a token"
+msgstr "シンボル %s が再宣言されました"
 
-#: src/symtab.c:407
+#: src/symtab.c:311
+#, fuzzy, c-format
+msgid "symbol %s redeclared as a nonterminal"
+msgstr "シンボル %s が再宣言されました"
+
+#: src/symtab.c:465
 #, c-format
 msgid "symbol %s redeclared"
 msgstr "シンボル %s が再宣言されました"
 
-#: src/symtab.c:429
+#: src/symtab.c:483
+#, c-format
+msgid "nonterminals cannot be given an explicit number"
+msgstr ""
+
+#: src/symtab.c:486
 #, fuzzy, c-format
 msgid "redefining user token number of %s"
 msgstr "%s に先行した再定義です"
 
-#: src/symtab.c:459
+#: src/symtab.c:519
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
 "シンボル %s が使われていますが、トークンとして定義されておらず、規則を持ちま"
 "せん"
 
-#: src/symtab.c:497
+#: src/symtab.c:553
 #, c-format
 msgid "useless %s for type <%s>"
 msgstr ""
 
-#: src/symtab.c:502
+#: src/symtab.c:558
 #, fuzzy, c-format
 msgid "type <%s> is used, but is not associated to any symbol"
 msgstr ""
 "シンボル %s が使われていますが、トークンとして定義されておらず、規則を持ちま"
 "せん"
 
-#: src/symtab.c:527
+#: src/symtab.c:619
+#, c-format
+msgid "nonterminals cannot be given a string alias"
+msgstr ""
+
+#: src/symtab.c:622
 #, fuzzy, c-format
 msgid "symbol %s used more than once as a literal string"
 msgstr "シンボル `%s' はリテラル文字列として複数回使われました"
 
-#: src/symtab.c:530
+#: src/symtab.c:625
 #, fuzzy, c-format
 msgid "symbol %s given more than one literal string"
 msgstr "シンボル `%s' は複数のリテラル文字列が与えられました"
 
-#: src/symtab.c:629
+#: src/symtab.c:667
 #, fuzzy, c-format
 msgid "user token number %d redeclaration for %s"
 msgstr "%s の型が再定義されました"
 
-#: src/symtab.c:633
+#: src/symtab.c:671
 #, c-format
 msgid "previous declaration for %s"
 msgstr "%s に対する以前の宣言"
 
-#: src/symtab.c:1014
+#: src/symtab.c:1038
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "開始シンボル %s は定義されていません"
 
-#: src/symtab.c:1018
+#: src/symtab.c:1042
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "開始シンボル %s はトークンです"
 
-#: src/symtab.c:1193
+#: src/symtab.c:1213
 #, c-format
 msgid "useless precedence and associativity for %s"
 msgstr ""
 
-#: src/symtab.c:1196
+#: src/symtab.c:1216
 #, c-format
 msgid "useless precedence for %s"
 msgstr ""
 
-#: src/symtab.c:1200
+#: src/symtab.c:1220
 #, c-format
 msgid "useless associativity for %s, use %%precedence"
 msgstr ""
 
-#: djgpp/subpipe.c:63 djgpp/subpipe.c:286 djgpp/subpipe.c:288
-#, c-format
-msgid "removing of '%s' failed"
-msgstr "'%s' の削除に失敗しました"
+#~ msgid "invalid argument %s for %s"
+#~ msgstr "%2$s に対する引数 %1$s が間違っています"
 
-#: djgpp/subpipe.c:85 djgpp/subpipe.c:92
-#, c-format
-msgid "creation of a temporary file failed"
-msgstr "一時ファイルの生成に失敗しました"
+#~ msgid "ambiguous argument %s for %s"
+#~ msgstr "%2$s に対する引数 %1$s が曖昧です"
 
-#: djgpp/subpipe.c:127
-#, c-format
-msgid "saving stdin failed"
-msgstr "標準入力の保存に失敗しました"
+#~ msgid "Valid arguments are:"
+#~ msgstr "有効な引数:"
 
-#: djgpp/subpipe.c:131
-#, c-format
-msgid "saving stdout failed"
-msgstr "標準出力の保存に失敗しました"
+#~ msgid "write error"
+#~ msgstr "書き込みエラー"
 
-#: djgpp/subpipe.c:153 djgpp/subpipe.c:197 djgpp/subpipe.c:258
-#, fuzzy, c-format
-msgid "opening of tmpfile failed"
-msgstr "辞書を開くのに失敗しました: %s"
+#~ msgid "Unknown system error"
+#~ msgstr "不明なシステムエラー"
 
-#: djgpp/subpipe.c:157
-#, c-format
-msgid "redirecting bison's stdout to the temporary file failed"
-msgstr ""
+#~ msgid "%s: option '%s%s' is ambiguous\n"
+#~ msgstr "%s: オプション '%s%s' は曖昧です\n"
 
-#: djgpp/subpipe.c:201
-#, c-format
-msgid "redirecting m4's stdin from the temporary file failed"
-msgstr ""
+#~ msgid "%s: option '%s%s' is ambiguous; possibilities:"
+#~ msgstr "%s: オプション '%s%s' は曖昧です; 候補:"
 
-#: djgpp/subpipe.c:212
-#, fuzzy, c-format
-msgid "opening of a temporary file failed"
-msgstr "作業用ファイルのオープンに失敗しました"
+#~ msgid "%s: unrecognized option '%s%s'\n"
+#~ msgstr "%s: オプション '%s%s' を認識できません\n"
 
-#: djgpp/subpipe.c:218
-#, c-format
-msgid "redirecting m4's stdout to a temporary file failed"
-msgstr ""
+#~ msgid "%s: option '%s%s' doesn't allow an argument\n"
+#~ msgstr "%s: オプション '%s%s' は引数を取ることができません\n"
 
-#: djgpp/subpipe.c:234
-#, fuzzy, c-format
-msgid "subsidiary program '%s' interrupted"
-msgstr "シグナルによる割り込み"
+#~ msgid "%s: option '%s%s' requires an argument\n"
+#~ msgstr "%s: オプション '%s%s' には引数が必要です\n"
 
-#: djgpp/subpipe.c:241
-#, fuzzy, c-format
-msgid "subsidiary program '%s' not found"
-msgstr "%s: シェルプログラムが見つかりませんでした"
+#~ msgid "%s: invalid option -- '%c'\n"
+#~ msgstr "%s: 無効なオプション -- '%c'\n"
 
-#: djgpp/subpipe.c:265
-#, c-format
-msgid "redirecting bison's stdin from the temporary file failed"
-msgstr ""
+#~ msgid "%s: option requires an argument -- '%c'\n"
+#~ msgstr "%s: オプションには引数が必要です -- '%c'\n"
 
-#: lib/argmatch.c:133
-#, c-format
-msgid "invalid argument %s for %s"
-msgstr "%2$s に対する引数 %1$s が間違っています"
+#~ msgid "memory exhausted"
+#~ msgstr "メモリを使い果たしました"
 
-#: lib/argmatch.c:134
-#, c-format
-msgid "ambiguous argument %s for %s"
-msgstr "%2$s に対する引数 %1$s が曖昧です"
+#~ msgid "cannot create pipe"
+#~ msgstr "パイプを作成できません"
 
-#: lib/argmatch.c:153
-msgid "Valid arguments are:"
-msgstr "有効な引数:"
+#~ msgid "%s subprocess failed"
+#~ msgstr "%s サブプロセスが失敗しました"
 
-#: lib/bitset_stats.c:177
-#, c-format
-msgid "%u bitset_allocs, %u freed (%.2f%%).\n"
-msgstr ""
+#~ msgid "`"
+#~ msgstr "`"
 
-#: lib/bitset_stats.c:180
-#, c-format
-msgid "%u bitset_sets, %u cached (%.2f%%)\n"
-msgstr ""
+#~ msgid "'"
+#~ msgstr "'"
 
-#: lib/bitset_stats.c:183
-#, c-format
-msgid "%u bitset_resets, %u cached (%.2f%%)\n"
-msgstr ""
-
-#: lib/bitset_stats.c:186
-#, c-format
-msgid "%u bitset_tests, %u cached (%.2f%%)\n"
-msgstr ""
-
-#: lib/bitset_stats.c:190
-#, fuzzy, c-format
-msgid "%u bitset_lists\n"
-msgstr "パッケージリストを読み込んでいます"
-
-#: lib/bitset_stats.c:192
 #, fuzzy
-msgid "count log histogram\n"
-msgstr ""
-"ヒストグラムダイアログを開きます。\n"
-"アクティブな画像のヒストグラムを表示します。"
+#~| msgid ""
+#~| "\n"
+#~| "Execution times (seconds)\n"
+#~ msgid "Execution times (seconds)"
+#~ msgstr ""
+#~ "\n"
+#~ "実行時間 (秒)\n"
 
-#: lib/bitset_stats.c:195
 #, fuzzy
-msgid "size log histogram\n"
-msgstr "ログの合計サイズ:"
+#~| msgid "Alarm clock"
+#~ msgid "wall clock"
+#~ msgstr "Alarm clock"
 
-#: lib/bitset_stats.c:198
+#~ msgid "_open_osfhandle failed"
+#~ msgstr "_open_osfhandle に失敗しました"
+
+#~ msgid "cannot restore fd %d: dup2 failed"
+#~ msgstr "ファイル記述子 (fd) %d をリストアできません: dup2 に失敗しました"
+
+#~ msgid "%s subprocess"
+#~ msgstr "%s 子プロセス"
+
+#~ msgid "%s subprocess got fatal signal %d"
+#~ msgstr "%s 子プロセスが致命的なシグナル %d を受信しました"
+
 #, fuzzy
-msgid "density histogram\n"
-msgstr "ヒストグラムの種類"
+#~ msgid "%u bitset_lists\n"
+#~ msgstr "パッケージリストを読み込んでいます"
 
-#: lib/bitset_stats.c:212
-#, fuzzy, c-format
-msgid ""
-"Bitset statistics:\n"
-"\n"
-msgstr "<b>統計オプション</b>"
-
-#: lib/bitset_stats.c:215
-#, c-format
-msgid "Accumulated runs = %u\n"
-msgstr ""
-
-#: lib/bitset_stats.c:259 lib/bitset_stats.c:264
 #, fuzzy
-msgid "cannot read stats file"
-msgstr ""
-" 元ファイル \"%s\" を読めません\n"
-" %s "
+#~ msgid "count log histogram\n"
+#~ msgstr ""
+#~ "ヒストグラムダイアログを開きます。\n"
+#~ "アクティブな画像のヒストグラムを表示します。"
 
-#: lib/bitset_stats.c:261
-#, fuzzy, c-format
-msgid "bad stats file size\n"
-msgstr ""
-"<b>ファイル:</b> %s\n"
-"<b>サイズ:</b> %s\n"
-"<b>画像のサイズ:</b> %dx%d"
-
-#: lib/bitset_stats.c:287 lib/bitset_stats.c:289
 #, fuzzy
-msgid "cannot write stats file"
-msgstr ""
-" ターゲットファイル \"%s\" に書き込めません\n"
-" %s "
+#~ msgid "size log histogram\n"
+#~ msgstr "ログの合計サイズ:"
 
-#: lib/bitset_stats.c:292
 #, fuzzy
-msgid "cannot open stats file for writing"
-msgstr "バックアップファイル \"%s\" を書き込み用に開くことができません"
+#~ msgid "density histogram\n"
+#~ msgstr "ヒストグラムの種類"
 
-#: lib/closeout.c:112
-msgid "write error"
-msgstr "書き込みエラー"
+#, fuzzy
+#~ msgid ""
+#~ "Bitset statistics:\n"
+#~ "\n"
+#~ msgstr "<b>統計オプション</b>"
 
-#: lib/error.c:191
-msgid "Unknown system error"
-msgstr "不明なシステムエラー"
+#, fuzzy
+#~ msgid "cannot read stats file"
+#~ msgstr ""
+#~ " 元ファイル \"%s\" を読めません\n"
+#~ " %s "
 
-#: lib/getopt.c:547 lib/getopt.c:576
-#, fuzzy, c-format
-msgid "%s: option '%s' is ambiguous; possibilities:"
-msgstr "%s: オプション '%s' は曖昧です; 候補:"
+#, fuzzy
+#~ msgid "bad stats file size\n"
+#~ msgstr ""
+#~ "<b>ファイル:</b> %s\n"
+#~ "<b>サイズ:</b> %s\n"
+#~ "<b>画像のサイズ:</b> %dx%d"
 
-#: lib/getopt.c:624 lib/getopt.c:628
-#, c-format
-msgid "%s: option '--%s' doesn't allow an argument\n"
-msgstr "%s: オプション '--%s' は引数を取ることができません\n"
+#, fuzzy
+#~ msgid "cannot write stats file"
+#~ msgstr ""
+#~ " ターゲットファイル \"%s\" に書き込めません\n"
+#~ " %s "
 
-#: lib/getopt.c:637 lib/getopt.c:642
-#, c-format
-msgid "%s: option '%c%s' doesn't allow an argument\n"
-msgstr "%s: オプション '%c%s' は引数を取ることができません\n"
+#, fuzzy
+#~ msgid "cannot open stats file for writing"
+#~ msgstr "バックアップファイル \"%s\" を書き込み用に開くことができません"
 
-#: lib/getopt.c:685 lib/getopt.c:704
-#, fuzzy, c-format
-msgid "%s: option '--%s' requires an argument\n"
-msgstr "%s: オプション '--%s' には引数が必要です\n"
+#, fuzzy
+#~| msgid "weird file"
+#~ msgid "end \"ABC\" of file"
+#~ msgstr "不明なファイル"
 
-#: lib/getopt.c:742 lib/getopt.c:745
-#, c-format
-msgid "%s: unrecognized option '--%s'\n"
-msgstr "%s: オプション '--%s' を認識できません\n"
+#, fuzzy
+#~| msgid "invalid identifier: %s"
+#~ msgid "[identifier]"
+#~ msgstr "無効な識別子: %s"
 
-#: lib/getopt.c:753 lib/getopt.c:756
-#, c-format
-msgid "%s: unrecognized option '%c%s'\n"
-msgstr "%s: オプション '%c%s' を認識できません\n"
+#, fuzzy
+#~| msgid "empty character literal"
+#~ msgid "character literal"
+#~ msgstr "空の文字定数"
 
-#: lib/getopt.c:805 lib/getopt.c:808
-#, c-format
-msgid "%s: invalid option -- '%c'\n"
-msgstr "%s: 無効なオプション -- '%c'\n"
+#, fuzzy
+#~| msgid "invalid identifier: %s"
+#~ msgid "identifier"
+#~ msgstr "無効な識別子: %s"
 
-#: lib/getopt.c:861 lib/getopt.c:878 lib/getopt.c:1088 lib/getopt.c:1106
-#, c-format
-msgid "%s: option requires an argument -- '%c'\n"
-msgstr "%s: オプションには引数が必要です -- '%c'\n"
+#, fuzzy
+#~| msgid "invalid identifier: %s"
+#~ msgid "identifier:"
+#~ msgstr "無効な識別子: %s"
 
-#: lib/getopt.c:934 lib/getopt.c:950
-#, c-format
-msgid "%s: option '-W %s' is ambiguous\n"
-msgstr "%s: オプション '-W %s' は曖昧です\n"
+#, fuzzy
+#~| msgid "empty character literal"
+#~ msgid "integer literal"
+#~ msgstr "空の文字定数"
 
-#: lib/getopt.c:974 lib/getopt.c:992
-#, c-format
-msgid "%s: option '-W %s' doesn't allow an argument\n"
-msgstr "%s: オプション '-W %s' は引数を取ることができません\n"
+#~ msgid "symbol %s redefined"
+#~ msgstr "シンボル %s が再定義されました"
 
-#: lib/getopt.c:1013 lib/getopt.c:1031
-#, fuzzy, c-format
-msgid "%s: option '-W %s' requires an argument\n"
-msgstr "%s: オプション '-W %s' には引数が必要です\n"
+#~ msgid "removing of '%s' failed"
+#~ msgstr "'%s' の削除に失敗しました"
 
-#: lib/obstack.c:338 lib/obstack.c:340 lib/xalloc-die.c:34
-msgid "memory exhausted"
-msgstr "メモリを使い果たしました"
+#~ msgid "creation of a temporary file failed"
+#~ msgstr "一時ファイルの生成に失敗しました"
 
-#: lib/spawn-pipe.c:135 lib/spawn-pipe.c:138 lib/spawn-pipe.c:259
-#: lib/spawn-pipe.c:262
-#, c-format
-msgid "cannot create pipe"
-msgstr "パイプを作成できません"
+#~ msgid "saving stdin failed"
+#~ msgstr "標準入力の保存に失敗しました"
 
-#: lib/spawn-pipe.c:229 lib/spawn-pipe.c:343 lib/wait-process.c:282
-#: lib/wait-process.c:356
-#, c-format
-msgid "%s subprocess failed"
-msgstr "%s サブプロセスが失敗しました"
+#~ msgid "saving stdout failed"
+#~ msgstr "標準出力の保存に失敗しました"
 
-#. TRANSLATORS:
-#. Get translations for open and closing quotation marks.
-#. The message catalog should translate "`" to a left
-#. quotation mark suitable for the locale, and similarly for
-#. "'".  For example, a French Unicode local should translate
-#. these to U+00AB (LEFT-POINTING DOUBLE ANGLE
-#. QUOTATION MARK), and U+00BB (RIGHT-POINTING DOUBLE ANGLE
-#. QUOTATION MARK), respectively.
-#.
-#. If the catalog has no translation, we will try to
-#. use Unicode U+2018 (LEFT SINGLE QUOTATION MARK) and
-#. Unicode U+2019 (RIGHT SINGLE QUOTATION MARK).  If the
-#. current locale is not Unicode, locale_quoting_style
-#. will quote 'like this', and clocale_quoting_style will
-#. quote "like this".  You should always include translations
-#. for "`" and "'" even if U+2018 and U+2019 are appropriate
-#. for your locale.
-#.
-#. If you don't know what to put here, please see
-#. <http://en.wikipedia.org/wiki/Quotation_marks_in_other_languages>
-#. and use glyphs suitable for your language.
-#: lib/quotearg.c:312
-msgid "`"
-msgstr "`"
+#~ msgid "opening of tmpfile failed"
+#~ msgstr "一時ファイルを開くのに失敗しました"
 
-#: lib/quotearg.c:313
-msgid "'"
-msgstr "'"
+#, fuzzy
+#~| msgid "creation of a temporary file failed"
+#~ msgid "redirecting bison's stdout to the temporary file failed"
+#~ msgstr "一時ファイルの生成に失敗しました"
 
-#: lib/timevar.c:475
-msgid ""
-"\n"
-"Execution times (seconds)\n"
-msgstr ""
-"\n"
-"実行時間 (秒)\n"
+#, fuzzy
+#~| msgid "creation of a temporary file failed"
+#~ msgid "redirecting m4's stdin from the temporary file failed"
+#~ msgstr "一時ファイルの生成に失敗しました"
 
-#: lib/timevar.c:525
-msgid " TOTAL                 :"
-msgstr " 合計                  :"
+#~ msgid "opening of a temporary file failed"
+#~ msgstr "一時ファイルを開くのに失敗しました"
 
-#: lib/timevar.c:561
-#, fuzzy, c-format
-msgid "time in %s: %ld.%06ld (%ld%%)\n"
-msgstr "現在のシステム時間: %ld = %s\n"
+#, fuzzy
+#~| msgid "creation of a temporary file failed"
+#~ msgid "redirecting m4's stdout to a temporary file failed"
+#~ msgstr "一時ファイルの生成に失敗しました"
 
-#: lib/w32spawn.h:43
-#, c-format
-msgid "_open_osfhandle failed"
-msgstr "_open_osfhandle に失敗しました"
+#, fuzzy
+#~ msgid "subsidiary program '%s' interrupted"
+#~ msgstr "シグナルによる割り込み"
 
-#: lib/w32spawn.h:84
-#, c-format
-msgid "cannot restore fd %d: dup2 failed"
-msgstr "ファイル記述子 (fd) %d をリストアできません: dup2 に失敗しました"
+#, fuzzy
+#~ msgid "subsidiary program '%s' not found"
+#~ msgstr "%s: シェルプログラムが見つかりませんでした"
 
-#: lib/wait-process.c:223 lib/wait-process.c:255 lib/wait-process.c:317
-#, c-format
-msgid "%s subprocess"
-msgstr "%s 子プロセス"
+#, fuzzy
+#~| msgid "creation of a temporary file failed"
+#~ msgid "redirecting bison's stdin from the temporary file failed"
+#~ msgstr "一時ファイルの生成に失敗しました"
 
-#: lib/wait-process.c:274 lib/wait-process.c:346
-#, c-format
-msgid "%s subprocess got fatal signal %d"
-msgstr "%s 子プロセスが致命的なシグナル %d を受信しました"
+#~ msgid " TOTAL                 :"
+#~ msgstr " 合計                  :"
 
-#~ msgid "invalid $ value: $%d"
-#~ msgstr "無効な $ 値: $%d"
-
-#~ msgid "future versions of Bison will not add the ';'"
-#~ msgstr "将来のバージョンの Bison は ';' を追加しません"
+#, fuzzy
+#~ msgid "time in %s: %ld.%06ld (%ld%%)\n"
+#~ msgstr "現在のシステム時間: %ld = %s\n"
 
 #~ msgid "empty"
 #~ msgstr "空"
 
-#, fuzzy
-#~ msgid "deprecated %%define variable name: %s, use %s"
-#~ msgstr "警告: 未定義の変数 `%.*s'"
+#~ msgid " type %d is %s\n"
+#~ msgstr " タイプ %d は %s です\n"
 
 #~ msgid "state %d"
 #~ msgstr "状態 %d"
 
-#, fuzzy
-#~ msgid "redeclaration for default tagged %s"
-#~ msgstr "\"%s\" のラベル:"
+#~ msgid "future versions of Bison will not add the ';'"
+#~ msgstr "将来のバージョンの Bison は ';' を追加しません"
+
+#~ msgid "invalid $ value: $%d"
+#~ msgstr "無効な $ 値: $%d"
+
+#~ msgid "%s: option '--%s' doesn't allow an argument\n"
+#~ msgstr "%s: オプション '--%s' は引数を取ることができません\n"
 
 #, fuzzy
-#~ msgid "redeclaration for default tagless %s"
-#~ msgstr "\"%s\" のラベル:"
+#~ msgid "%s: option '--%s' requires an argument\n"
+#~ msgstr "%s: オプション '--%s' には引数が必要です\n"
+
+#~ msgid "%s: unrecognized option '--%s'\n"
+#~ msgstr "%s: オプション '--%s' を認識できません\n"
+
+#~ msgid "%s: option '-W %s' doesn't allow an argument\n"
+#~ msgstr "%s: オプション '-W %s' は引数を取ることができません\n"
+
+#, fuzzy
+#~ msgid "%s: option '-W %s' requires an argument\n"
+#~ msgstr "%s: オプション '-W %s' には引数が必要です\n"
 
 #, fuzzy
 #~ msgid "%s `%s' redefined"
@@ -1335,9 +1355,6 @@ msgstr "%s 子プロセスが致命的なシグナル %d を受信しました"
 #~ msgid "typed memory object"
 #~ msgstr "型付メモリオブジェクト"
 
-#~ msgid "weird file"
-#~ msgstr "不明なファイル"
-
 #~ msgid "Address family for hostname not supported"
 #~ msgstr "ホスト名に対する Address family がサポートされていません"
 
@@ -1394,9 +1411,6 @@ msgstr "%s 子プロセスが致命的なシグナル %d を受信しました"
 
 #~ msgid "Unknown error"
 #~ msgstr "不明なエラー"
-
-#~ msgid "%s: option '%s' requires an argument\n"
-#~ msgstr "%s: オプション '--%s' は引数が必要です\n"
 
 #~ msgid "invalid source_version argument to compile_java_class"
 #~ msgstr "compile_java_class への source_version 引数が無効です"
@@ -1554,9 +1568,6 @@ msgstr "%s 子プロセスが致命的なシグナル %d を受信しました"
 
 #~ msgid "Broken pipe"
 #~ msgstr "Broken pipe"
-
-#~ msgid "Alarm clock"
-#~ msgstr "Alarm clock"
 
 #~ msgid "Terminated"
 #~ msgstr "Terminated"
@@ -1786,9 +1797,6 @@ msgstr "%s 子プロセスが致命的なシグナル %d を受信しました"
 
 #~ msgid "cannot perform formatted output"
 #~ msgstr "書式設定を行った出力を実行することができません"
-
-#~ msgid "invalid %s%s argument `%s'"
-#~ msgstr "引数 `%3$s' に対して %1$s%2$s が無効です"
 
 #~ msgid "invalid suffix in %s%s argument `%s'"
 #~ msgstr "引数 `%3$s' に対して無効な接尾辞 %1$s%2$s です"

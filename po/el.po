@@ -2,53 +2,70 @@
 # Copyright (C) 2008 Free Software Foundation, Inc.
 # This file is distributed under the same license as the bison package.
 #
-# Lefteris Dimitroulakis <ledimitro@gmail.com>, 2008, 2013.
+# Lefteris Dimitroulakis <ledimitro@gmail.com>, 2008, 2013, 2019.
 msgid ""
 msgstr ""
-"Project-Id-Version: bison-3.0.2\n"
+"Project-Id-Version: bison-3.3.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-23 13:55+0100\n"
-"PO-Revision-Date: 2013-12-19 18:14+0200\n"
+"POT-Creation-Date: 2019-05-22 07:29+0200\n"
+"PO-Revision-Date: 2019-04-30 15:11+0200\n"
 "Last-Translator: Lefteris Dimitroulakis <ledimitro@gmail.com>\n"
 "Language-Team: Greek <team@lists.gnome.gr>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
 "Plural-Forms: nplurals=2; plural=( n !=1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 2.0\n"
 
-#: src/complain.c:322
-msgid "fatal error"
-msgstr "μοιραίο σφάλμα"
-
-#: src/complain.c:323
-msgid "error"
-msgstr "σφάλμα"
-
-#: src/complain.c:324
+#: src/complain.c:236
 msgid "warning"
 msgstr "προειδοποίηση"
 
-#: src/complain.c:387
+#: src/complain.c:238
+msgid "error"
+msgstr "σφάλμα"
+
+#: src/complain.c:240
+msgid "fatal error"
+msgstr "μοιραίο σφάλμα"
+
+#: src/complain.c:525
+#, c-format
+msgid "POSIX Yacc does not support %s"
+msgstr "Το POSIX Yacc δεν υποστηρίζει %s"
+
+#: src/complain.c:533
 #, c-format
 msgid "deprecated directive, use %s"
 msgstr "οδηγία υπό κατάργηση, χρησιμοποίησε %s"
 
-#: src/complain.c:391
+#: src/complain.c:537
 #, c-format
 msgid "deprecated directive: %s, use %s"
 msgstr "οδηγία υπό κατάργηση: %s, χρησιμοποίησε %s"
 
-#: src/complain.c:400
+#: src/complain.c:550
 #, c-format
-msgid "only one %s allowed per rule"
-msgstr "μόνο ένα %s ανά κανόνα επιτρέπεται"
+msgid "duplicate directive"
+msgstr "ταυτόσημη οδηγία"
 
-#: src/complain.c:402 src/reader.c:140 src/symtab.c:253 src/symtab.c:266
+#: src/complain.c:552
+#, c-format
+msgid "duplicate directive: %s"
+msgstr "ταυτόσημη οδηγία: %s"
+
+#: src/complain.c:554 src/complain.c:567 src/reader.c:136 src/symtab.c:288
+#: src/symtab.c:301
 #, c-format
 msgid "previous declaration"
 msgstr "προηγούμενη δήλωση"
+
+#: src/complain.c:564
+#, c-format
+msgid "only one %s allowed per rule"
+msgstr "μόνο ένα %s ανά κανόνα επιτρέπεται"
 
 #: src/conflicts.c:77
 #, c-format
@@ -71,91 +88,106 @@ msgstr ""
 "Η σύγκρουση μεταξύ του κανόνα %d και της λεκτικής μονάδας %s επιλύθηκε ως "
 "σφάλμα"
 
-#: src/conflicts.c:530
+#: src/conflicts.c:597
 #, c-format
 msgid "State %d "
 msgstr "Κατάσταση %d "
 
-#: src/conflicts.c:533
+#: src/conflicts.c:600
 #, c-format
 msgid "conflicts: %d shift/reduce, %d reduce/reduce\n"
 msgstr "συγκρούσεις: %d ολίσθηση/ελάττωση, %d ελάττωση/ελάττωση\n"
 
-#: src/conflicts.c:536
+#: src/conflicts.c:603
 #, c-format
 msgid "conflicts: %d shift/reduce\n"
 msgstr "συγκρούσεις: %d ολίσθηση/ελάττωση\n"
 
-#: src/conflicts.c:538
+#: src/conflicts.c:605
 #, c-format
 msgid "conflicts: %d reduce/reduce\n"
 msgstr "συγκρούσεις: %d ελάττωση/ελάττωση\n"
 
-#: src/conflicts.c:569
+#: src/conflicts.c:641
+#, c-format
+msgid "shift/reduce conflicts for rule %d: %d found, %d expected"
+msgstr "shift/reduce συγκρούσεις για κανόνα %d: βρέθηκαν %d, αναμενόταν %d"
+
+#: src/conflicts.c:647
+#, c-format
+msgid "reduce/reduce conflicts for rule %d: %d found, %d expected"
+msgstr "reduce/reduce συγκρούσεις για κανόνα %d: βρέθηκαν %d, αναμενόταν %d"
+
+#: src/conflicts.c:665
 #, c-format
 msgid "%%expect-rr applies only to GLR parsers"
 msgstr "%%expect-rr έχει εφαρμογή μόνο σε συντακτικούς αναλυτές GLR"
 
-#: src/conflicts.c:586
+#: src/conflicts.c:682
 #, c-format
 msgid "shift/reduce conflicts: %d found, %d expected"
 msgstr "shift/reduce συγκρούσεις: βρέθηκαν %d, αναμενόταν %d"
 
-#: src/conflicts.c:591
+#: src/conflicts.c:687
 #, c-format
 msgid "%d shift/reduce conflict"
 msgid_plural "%d shift/reduce conflicts"
 msgstr[0] "%d σύγκρουση ολίσθηση/ελάττωση"
 msgstr[1] "ανέμενα %d συγκρούσεις ολίσθηση/ελάττωση"
 
-#: src/conflicts.c:608
+#: src/conflicts.c:704
 #, c-format
 msgid "reduce/reduce conflicts: %d found, %d expected"
 msgstr "reduce/reduce συγκρούσεις: βρέθηκαν %d, αναμενόταν %d"
 
-#: src/conflicts.c:613
+#: src/conflicts.c:709
 #, c-format
 msgid "%d reduce/reduce conflict"
 msgid_plural "%d reduce/reduce conflicts"
 msgstr[0] "%d σύγκρουση ελάττωση/ελάττωση"
 msgstr[1] "%d συγκρούσεις ελάττωση/ελάττωση"
 
-#: src/files.c:123
+#: src/files.c:125
 #, c-format
 msgid "%s: cannot open"
 msgstr "%s: αδυναμία ανοίγματος"
 
-#: src/files.c:139
+#: src/files.c:141
 #, c-format
 msgid "input/output error"
 msgstr "σφάλμα εισόδου/εξόδου"
 
-#: src/files.c:142
+#: src/files.c:144
 #, c-format
 msgid "cannot close file"
 msgstr "δεν μπορώ να κλείσω το αρχείο"
 
-#: src/files.c:372
+#: src/files.c:375
 #, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr "άρνηση εγγραφής πάνω στο αρχείο εισόδου %s"
 
-#: src/files.c:382
+#: src/files.c:383
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "αντικρουόμενες έξοδοι στο αρχείο %s"
 
-#: src/getargs.c:252
+#: src/fixits.c:122
+#, c-format
+msgid "%s: cannot backup"
+msgstr "%s: αδυναμία δημιουργίας αντιγράφου ασφαλείας"
+
+#: src/getargs.c:266
 #, c-format
 msgid "Try '%s --help' for more information.\n"
 msgstr "Δοκίμασε «%s --help» για περισσότερες πληροφορίες.\n"
 
-#: src/getargs.c:261
+#: src/getargs.c:275
 #, c-format
 msgid "Usage: %s [OPTION]... FILE\n"
 msgstr "Χρήση: %s [ΕΠΛΟΓΕΣ]... ΑΡΧΕΙΟ\n"
 
-#: src/getargs.c:262
+#: src/getargs.c:276
 msgid ""
 "Generate a deterministic LR or generalized LR (GLR) parser employing\n"
 "LALR(1), IELR(1), or canonical LR(1) parser tables.  IELR(1) and\n"
@@ -167,18 +199,18 @@ msgstr ""
 "canonical LR(1) support is experimental.\n"
 "\n"
 
-#: src/getargs.c:269
+#: src/getargs.c:283
 msgid ""
 "Mandatory arguments to long options are mandatory for short options too.\n"
 msgstr ""
 "Υποχρεωτικά ορίσματα σε μακρές επιλογές είναι υποχρεωτικά επίσης και στις "
 "κοντές.\n"
 
-#: src/getargs.c:272
+#: src/getargs.c:286
 msgid "The same is true for optional arguments.\n"
 msgstr "Το ίδιο ισχύει και για τα μη υποχρεωτικά ορίσματα.\n"
 
-#: src/getargs.c:276
+#: src/getargs.c:290
 msgid ""
 "\n"
 "Operation modes:\n"
@@ -186,10 +218,14 @@ msgid ""
 "  -V, --version              output version information and exit\n"
 "      --print-localedir      output directory containing locale-dependent "
 "data\n"
+"                             and exit\n"
 "      --print-datadir        output directory containing skeletons and XSLT\n"
+"                             and exit\n"
+"  -u, --update               apply fixes to the source grammar file and "
+"exit\n"
 "  -y, --yacc                 emulate POSIX Yacc\n"
 "  -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n"
-"  -f, --feature[=FEATURE]    activate miscellaneous features\n"
+"  -f, --feature[=FEATURES]   activate miscellaneous features\n"
 "\n"
 msgstr ""
 "\n"
@@ -197,14 +233,15 @@ msgstr ""
 "  -h, --help                 εμφάνιση αυτής εδώ της βοήθειας κι έξοδος\n"
 "  -V, --version              πληροφορίες έκδοσης κι έξοδος\n"
 "      --print-localedir      ο κατάλογος με τα δεδομένα των locale\n"
-"      --print-datadir        ο κατάλογος με σκελετούς και XSLT\n"
+"      --print-datadir        ο κατάλογος με σκελετούς και XSLT κι έξοδος\n"
+"  -u, --update      εφαρμογή διορθώσεων στο αρχείο γραμματικής κι έξοδος\n"
 "  -y, --yacc                 emulate POSIX Yacc\n"
 "  -W, --warnings=[ΚΑΤΗΓΟΡΙΑ]  παρουσιάζει τις προειδοποιήσεις που ανήκουν "
 "στη ΚΑΤΗΓΟΡΙΑ\n"
-"  -f, --feature[=FEATURE]  ενεργοποίηση διαφόρων features\n"
+"  -f, --feature[=FEATURES]  ενεργοποίηση διαφόρων features\n"
 "\n"
 
-#: src/getargs.c:289
+#: src/getargs.c:306
 #, c-format
 msgid ""
 "Parser:\n"
@@ -235,7 +272,7 @@ msgstr ""
 "  -k, --token-table      να συμπεριληφθεί πίνακας με ονόματα λεκτικών "
 "μονάδων\n"
 
-#: src/getargs.c:307
+#: src/getargs.c:324
 msgid ""
 "Output:\n"
 "      --defines[=FILE]       also produce a header file\n"
@@ -262,17 +299,17 @@ msgstr ""
 "  -x, --xml[=ΑΡΧΕΙΟ]           αναφορά από το αυτόματο σε μορφή XML\n"
 "                             (η μορφή XML είναι σε πειραματικό στάδιο)\n"
 
-#: src/getargs.c:322
+#: src/getargs.c:339
 #, c-format
 msgid ""
 "Warning categories include:\n"
-"  'midrule-values'    unset or unused midrule values\n"
-"  'yacc'              incompatibilities with POSIX Yacc\n"
 "  'conflicts-sr'      S/R conflicts (enabled by default)\n"
 "  'conflicts-rr'      R/R conflicts (enabled by default)\n"
 "  'deprecated'        obsolete constructs\n"
 "  'empty-rule'        empty rules without %empty\n"
+"  'midrule-values'    unset or unused midrule values\n"
 "  'precedence'        useless precedence and associativity\n"
+"  'yacc'              incompatibilities with POSIX Yacc\n"
 "  'other'             all other warnings (enabled by default)\n"
 "  'all'               all the warnings except 'yacc'\n"
 "  'no-CATEGORY'       turn off warnings in CATEGORY\n"
@@ -280,20 +317,21 @@ msgid ""
 "  'error[=CATEGORY]'  treat warnings as errors\n"
 msgstr ""
 "Οι κατηγορίες προειδοποίησης περιλαμβάνουν:\n"
-"  'midrule-values'    unset or unused midrule values\n"
-"  'yacc'              ασυμβατότητες με POSIX Yacc\n"
 "  'conflicts-sr'      συγκρούσεις S/R (προεπιλογή)\n"
 "  'conflicts-rr'      συγκρούσεις R/R (προεπιλογή)\n"
-"  'deprecated'        καταργημένα\n"
-"  'empty-rule'        κενοί κανόνες χωρίς %empty\n"
+"  'deprecated'        καταργημένοι\n"
+"  'empty-rule'       κενοί κανόνες χωρίς %empty\n"
+"  'midrule-values'  μη καθορισμένες ή μη χρησιμοποιούμενες midrule values\n"
 "  'precedence'        άχρηστη προτεραιότητα και προσεταιριστικότητα\n"
 "  'other'             όλες οι άλλες προειδοποιήσεις)\n"
-"  'all'               όλες οι προειδοποιήσεις εκτός «yacc»\n"
+"  'yacc'            ασυμβατότητες με το POSIX Yacc\n"
+"  'other'    όλες οι άλλες προειδοποιήσεις (προεπιλογή)  'all'               "
+"όλες οι προειδοποιήσεις εκτός «yacc»\n"
 "  'no-CATEGORY'       απενεργοποίηση προειδοποιήσεων στη CATEGORY\n"
 "  'none'              γενική απενεργοποίηση προειδοποιήσεων\n"
-"  'error[=CATEGORY]'  θεωρώ τις προειδοποιήσεις ως σφάλματα\n"
+"  'error[=CATEGORY]'  θεωρεί τις προειδοποιήσεις ως σφάλματα\n"
 
-#: src/getargs.c:339
+#: src/getargs.c:356
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
 "  'state'        describe the states\n"
@@ -312,32 +350,46 @@ msgstr ""
 "  `all'          περιλαμβάνει όλες τις παραπάνω πληροφορίες\n"
 "  `none'         απενεργοποίηση αναφοράς\n"
 
-#: src/getargs.c:350
+#: src/getargs.c:367
 msgid ""
-"FEATURE is a list of comma separated words that can include:\n"
-"  'caret'        show errors with carets\n"
-"  'all'          all of the above\n"
-"  'none'         disable all of the above\n"
+"FEATURES is a list of comma separated words that can include:\n"
+"  'caret', 'diagnostics-show-caret'\n"
+"    show errors with carets\n"
+"  'fixit', 'diagnostics-parseable-fixits'\n"
+"    show machine-readable fixes\n"
+"  'syntax-only'\n"
+"    do not generate any file\n"
+"  'all'\n"
+"    all of the above\n"
+"  'none'\n"
+"    disable all of the above\n"
 "  "
 msgstr ""
-"FEATURE είναι μια λίστα λέξεων που χωρίζονται από κόμματα και μπορεί να "
-"περιλαμβάνει:\n"
-"  «caret»        εμφάνιση σφαλμάτων με carets\n"
-"  «all»          όλα τα παραπάνω\n"
-"  «none»         απενεργοποίηση όλων των παραπάνω\n"
+"FEATURES είναι λίστα λέξεων χωριζόμενων από κόμματα που μπορεί να "
+"περιλαμβάνουν:\n"
+"  'caret', 'diagnostics-show-caret'\n"
+"    εμφάνιση σφαλμάτων με carets\n"
+"  'fixit', 'diagnostics-parseable-fixits'\n"
+"    εμφάνιση machine-readable fixes\n"
+"  'syntax-only'\n"
+"    μην δημιουργήσεις αρχείο\n"
+"  'all'\n"
+"    όλα τα παραπάνω\n"
+"  'none'\n"
+"    απενεργοποίηση όλων των παραπάνω\n"
 "  "
 
-#: src/getargs.c:358
+#: src/getargs.c:382
 #, c-format
 msgid "Report bugs to <%s>.\n"
 msgstr "Αναφορά σφαλμάτων σε <%s>.\n"
 
-#: src/getargs.c:359
+#: src/getargs.c:383
 #, c-format
 msgid "%s home page: <%s>.\n"
 msgstr "%s home page: <%s>.\n"
 
-#: src/getargs.c:360
+#: src/getargs.c:384
 msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
 msgstr ""
 "Γενική βοήθεια χρήσης του λογισμικού GNU: <http://www.gnu.org/gethelp/>.\n"
@@ -347,29 +399,29 @@ msgstr ""
 #. form one of the URLs at http://translationproject.org/team/.
 #. Otherwise, replace the entire URL with your translation team's
 #. email address.
-#: src/getargs.c:373
+#: src/getargs.c:399
 msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
 msgstr "Αναφορά σφαλμάτων μετάφρασης <http://translationproject.org/team/>.\n"
 
-#: src/getargs.c:375
+#: src/getargs.c:402
 msgid "For complete documentation, run: info bison.\n"
 msgstr "Για πλήρη τεκμηρίωση δώσε: info bison.\n"
 
-#: src/getargs.c:391
+#: src/getargs.c:418
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:393
+#: src/getargs.c:420
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Γράφτηκε από τους Robert Corbett και Richard Stallman.\n"
 
-#: src/getargs.c:397
+#: src/getargs.c:424
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright (C) %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:400
+#: src/getargs.c:427
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -377,48 +429,49 @@ msgstr ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 
-#: src/getargs.c:422
+#: src/getargs.c:449
 #, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "πολλαπλές δηλώσεις σκελετού είναι μη έγκυρες"
 
-#: src/getargs.c:440
+#: src/getargs.c:466
 #, c-format
 msgid "%s: invalid language"
 msgstr "%s: μη έγκυρη γλώσσα"
 
-#: src/getargs.c:443
+#: src/getargs.c:469
 msgid "multiple language declarations are invalid"
 msgstr "πολλαπλές δηλώσεις γλώσσας είναι μη έγκυρες"
 
-#: src/getargs.c:724
+#: src/getargs.c:798
 #, c-format
-msgid "%s: missing operand"
-msgstr "%s: τελεστέος που λείπει"
+msgid "missing operand"
+msgstr "λείπει τελεστέος"
 
-#: src/getargs.c:726
+#: src/getargs.c:800
 #, c-format
 msgid "extra operand %s"
 msgstr "επί πλέον τελεστέος %s"
 
-#: src/gram.c:185
+#: src/gram.c:218
 msgid "Grammar"
 msgstr "Γραμματική"
 
-#: src/graphviz.c:45
-#, c-format
+#: src/graphviz.c:46
+#, fuzzy, c-format
 msgid ""
 "// Generated by %s.\n"
 "// Report bugs to <%s>.\n"
 "// Home page: <%s>.\n"
 "\n"
 msgstr ""
+"\n"
 "// Generated by %s.\n"
-"// Report bugs to <%s>.\n"
+"// Αναφορά σφαλμάτων στο <%s>.\n"
 "// Home page: <%s>.\n"
 "\n"
 
-#: src/location.c:93 src/scan-gram.l:932
+#: src/location.c:93 src/scan-gram.l:953
 #, c-format
 msgid "line number overflow"
 msgstr "υπερχείλιση αριθμού γραμμών"
@@ -428,216 +481,243 @@ msgstr "υπερχείλιση αριθμού γραμμών"
 msgid "column number overflow"
 msgstr "υπερχείλιση αριθμού στηλών"
 
-#: src/main.c:146
+#: src/location.c:97
+#, c-format
+msgid "byte number overflow"
+msgstr "υπερχείλιση byte number"
+
+#: src/main.c:155
 msgid "rule useless in parser due to conflicts"
 msgstr "ο κανόνας είναι άχρηστος στον αναλυτή λόγω συγκρούσεων"
 
-#: src/muscle-tab.c:514
+#: src/main.c:246
+#, c-format
+msgid "fix-its can be applied.  Rerun with option '--update'."
+msgstr "fix-its μπορεί να εφαρμοστεί.  Ξανατρέξε με την επιλογή '--update'."
+
+#: src/muscle-tab.c:532
 #, c-format
 msgid "%%define variable %s redefined"
 msgstr "%%define variable %s redefined"
 
-#: src/muscle-tab.c:518
+#: src/muscle-tab.c:536 src/symtab.c:316
 #, c-format
 msgid "previous definition"
 msgstr "προηγούμενος ορισμός"
 
-#: src/muscle-tab.c:568 src/muscle-tab.c:669 src/muscle-tab.c:732
+#: src/muscle-tab.c:595 src/muscle-tab.c:696 src/muscle-tab.c:757
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "%s: ακαθόριστο %%καθόρισε τη μεταβλητή %s"
 
-#: src/muscle-tab.c:663
+#: src/muscle-tab.c:690
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr "μη έγκυρη τιμή για %%καθόρισε τη μεταβλητή μπουλ %s"
 
-#: src/muscle-tab.c:717
+#: src/muscle-tab.c:744
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "μη έγκυρη τιμή για %%καθόρισε τη μεταβλητή %s: %s"
 
-#: src/muscle-tab.c:722
+#: src/muscle-tab.c:749
 #, c-format
 msgid "accepted value: %s"
 msgstr "αποδεκτή τιμή: %s"
 
-#: src/parse-gram.y:811
+#: src/parse-gram.y:738
+msgid "character literals cannot be nonterminals"
+msgstr "character literals δεν μπορεί να είναι nonterminals"
+
+#: src/parse-gram.y:870
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "το όνομα λείπει στη δήλωση παραμέτρου"
 
-#: src/print.c:47
+#: src/parse-gram.y:973 src/parse-gram.y:981
 #, c-format
-msgid " type %d is %s\n"
-msgstr "ο τύπος %d είναι %s\n"
+msgid "invalid version requirement: %s"
+msgstr "invalid version requirement: %s"
 
-#: src/print.c:167
+#: src/parse-gram.y:994
 #, c-format
-msgid "shift, and go to state %d\n"
-msgstr "ολίσθηση, και μετάβαση στη κατάσταση %d\n"
+msgid "require bison %s, but have %s"
+msgstr "απαιτεί bison %s, αλλά διαθέτει %s"
 
-#: src/print.c:169
-#, c-format
-msgid "go to state %d\n"
-msgstr "πήγαινε στην κατάσταση %d\n"
-
-#: src/print.c:206
-msgid "error (nonassociative)\n"
-msgstr "σφάλμα (μη προσεταιριστικό)\n"
-
-#: src/print.c:229
-#, c-format
-msgid "reduce using rule %d (%s)"
-msgstr "ελάττωση με χρήση του κανόνα %d (%s)"
-
-#: src/print.c:231
-#, c-format
-msgid "accept"
-msgstr "αποδοχή"
-
-#: src/print.c:267 src/print.c:341
-msgid "$default"
-msgstr "$default"
-
-#: src/print.c:377 src/print_graph.c:61
+#: src/print-graph.c:62 src/print.c:345
 #, c-format
 msgid "State %d"
 msgstr "Κατάσταση %d "
 
-#: src/print.c:413
+#: src/print.c:136
+#, c-format
+msgid "shift, and go to state %d\n"
+msgstr "ολίσθηση, και μετάβαση στη κατάσταση %d\n"
+
+#: src/print.c:138
+#, c-format
+msgid "go to state %d\n"
+msgstr "πήγαινε στην κατάσταση %d\n"
+
+#: src/print.c:173
+msgid "error (nonassociative)\n"
+msgstr "σφάλμα (μη προσεταιριστικό)\n"
+
+#: src/print.c:195
+#, c-format
+msgid "reduce using rule %d (%s)"
+msgstr "ελάττωση με χρήση του κανόνα %d (%s)"
+
+#: src/print.c:198
+#, c-format
+msgid "accept"
+msgstr "αποδοχή"
+
+#: src/print.c:235 src/print.c:309
+msgid "$default"
+msgstr "$default"
+
+#: src/print.c:364
 msgid "Terminals, with rules where they appear"
 msgstr "Τερματικά σύμβολα, με κανόνες όπου εμφανίζονται"
 
-#: src/print.c:440
+#: src/print.c:391
 msgid "Nonterminals, with rules where they appear"
 msgstr "Μη τερματικά σύμβολα, με κανόνες όπου εμφανίζονται"
 
-#: src/print.c:469
-#, c-format
-msgid " on left:"
+#: src/print.c:416
+msgid "on left:"
 msgstr "στα αριστερά:"
 
-#: src/print.c:486
-#, c-format
-msgid " on right:"
+#: src/print.c:425
+msgid "on right:"
 msgstr "στα δεξιά:"
 
-#: src/print.c:514
+#: src/print.c:447
 msgid "Rules useless in parser due to conflicts"
 msgstr "Κανόνες άχρηστοι στον αναλυτή λόγω συγκρούσεων"
 
-#: src/reader.c:62
+#: src/reader.c:60
 #, c-format
 msgid "multiple %s declarations"
 msgstr "πολλαπλές δηλώσεις του %s"
 
-#: src/reader.c:133
+#: src/reader.c:129
 #, c-format
 msgid "result type clash on merge function %s: <%s> != <%s>"
 msgstr "σύγκρουση παραγόμενου τύπου στη συνάρτηση συγχώνευσης %s: <%s> != <%s>"
 
-#: src/reader.c:206
+#: src/reader.c:202
 #, c-format
 msgid "duplicated symbol name for %s ignored"
 msgstr "διπλό όνομα συμβόλου για %s αγνοήθηκε"
 
-#: src/reader.c:250
+#: src/reader.c:242
 #, c-format
 msgid "rule given for %s, which is a token"
 msgstr "κανόνας δοσμένος για %s, που είναι λεκτική μονάδα"
 
-#: src/reader.c:306
+#: src/reader.c:299
 #, c-format
 msgid "type clash on default action: <%s> != <%s>"
 msgstr "σύγκρουση τύπων στην προεπιλεγμένη ενέργεια: <%s> != <%s>"
 
-#: src/reader.c:312
+#: src/reader.c:322
 #, c-format
 msgid "empty rule for typed nonterminal, and no action"
 msgstr "κενός κανόνας για μη τερματικό σύμβολο με τύπο, και ουδεμία ενέργεια"
 
-#: src/reader.c:329
+#: src/reader.c:338
 #, c-format
 msgid "unused value: $%d"
 msgstr "μη χρησιμοποιούμενη τιμή: $%d"
 
-#: src/reader.c:331
+#: src/reader.c:340
 #, c-format
 msgid "unset value: $$"
 msgstr "μη καθορισμένη τιμή: $$"
 
-#: src/reader.c:340
+#: src/reader.c:350
 #, c-format
 msgid "%%empty on non-empty rule"
 msgstr "%%κενός ή μη κενός κανόνας"
 
-#: src/reader.c:346
+#: src/reader.c:360
 #, c-format
 msgid "empty rule without %%empty"
 msgstr "κενός κανόνας χωρίς κενό %%"
 
-#: src/reader.c:355
+#: src/reader.c:374
 #, c-format
 msgid "token for %%prec is not defined: %s"
 msgstr "λεκτική μονάδα για %%prec δεν είναικαθορισμένη: %s"
 
-#: src/reader.c:473 src/reader.c:495
+#: src/reader.c:379
+#, c-format
+msgid "only midrule actions can be typed: %s"
+msgstr "only midrule actions can be typed: %s"
+
+#: src/reader.c:506 src/reader.c:528 src/reader.c:599
 #, c-format
 msgid "%s affects only GLR parsers"
 msgstr "%s επηρεάζει μόνο αναλυτές GLR"
 
-#: src/reader.c:476
+#: src/reader.c:509
 #, c-format
 msgid "%s must be followed by positive number"
 msgstr "%s πρέπει να ακολουθείται από θετικό αριθμό"
 
-#: src/reader.c:602
+#: src/reader.c:564
+#, c-format
+msgid "POSIX Yacc does not support typed midrule actions"
+msgstr "Το POSIX Yacc δεν υποστηρίζει typed midrule actions"
+
+#: src/reader.c:669
 #, c-format
 msgid "rule is too long"
 msgstr "κανόνας πολύ μεγάλος"
 
-#: src/reader.c:718
+#: src/reader.c:800
 #, c-format
 msgid "no rules in the input grammar"
 msgstr "γραμματική εισόδου χωρίς κανόνες"
 
-#: src/reduce.c:241
+#: src/reduce.c:225
 msgid "rule useless in grammar"
 msgstr "άχρηστος κανόνας στη γραμματική"
 
-#: src/reduce.c:303
+#: src/reduce.c:280
 #, c-format
 msgid "nonterminal useless in grammar: %s"
 msgstr "μη τερματικό σύμβολο άχρηστο στη γραμματική: %s"
 
-#: src/reduce.c:351
+#: src/reduce.c:321
 msgid "Nonterminals useless in grammar"
 msgstr "Μη τερματικά σύμβολα άχρηστα στη γραμματική"
 
-#: src/reduce.c:364
+#: src/reduce.c:333
 msgid "Terminals unused in grammar"
 msgstr "Τερματικά σύμβολα μη χρησιμοποιούμενα στη γραμματική"
 
-#: src/reduce.c:373
+#: src/reduce.c:342
 msgid "Rules useless in grammar"
 msgstr "Άχρηστοι κανόνες στη γραμματική"
 
-#: src/reduce.c:386
+#: src/reduce.c:355
 #, c-format
 msgid "%d nonterminal useless in grammar"
 msgid_plural "%d nonterminals useless in grammar"
 msgstr[0] "μη τερματικό σύμβολο %d άχρηστο στη γραμματική"
 msgstr[1] "μη τερματικά σύμβολα %d άχρηστα στη γραμματική"
 
-#: src/reduce.c:391
+#: src/reduce.c:360
 #, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
 msgstr[0] "ο κανόνας %d είναι άχρηστος στη γραμματική"
 msgstr[1] "οι κανόνες %d είναι άχρηστοι στη γραμματική"
 
-#: src/reduce.c:420
+#: src/reduce.c:386
 #, c-format
 msgid "start symbol %s does not derive any sentence"
 msgstr "το αρχικό σύμβολο %s δεν παράγει καμιά πρόταση"
@@ -647,561 +727,302 @@ msgstr "το αρχικό σύμβολο %s δεν παράγει καμιά π�
 msgid "stray '%s'"
 msgstr "stray '%s'"
 
-#: src/scan-code.l:339
+#: src/scan-code.l:329
 #, c-format
 msgid "refers to: %c%s at %s"
 msgstr "refers to: %c%s at %s"
 
-#: src/scan-code.l:362
+#: src/scan-code.l:353
 #, c-format
 msgid "possibly meant: %c"
 msgstr "πιθανή σημασία: %c"
 
-#: src/scan-code.l:371
+#: src/scan-code.l:362
 #, c-format
 msgid ", hiding %c"
 msgstr ", απόκρυψη %c"
 
-#: src/scan-code.l:379
+#: src/scan-code.l:370
 #, c-format
 msgid " at %s"
 msgstr "σε %s"
 
-#: src/scan-code.l:383
+#: src/scan-code.l:374
 #, c-format
-msgid ", cannot be accessed from mid-rule action at $%d"
-msgstr ", cannot be accessed from mid-rule action at $%d"
+msgid ", cannot be accessed from midrule action at $%d"
+msgstr ", cannot be accessed from midrule action at $%d"
 
-#: src/scan-code.l:440 src/scan-gram.l:855
+#: src/scan-code.l:422 src/scan-gram.l:876
 #, c-format
 msgid "integer out of range: %s"
 msgstr "ακέραιος εκτός ορίων: %s"
 
-#: src/scan-code.l:530
+#: src/scan-code.l:497
 #, c-format
 msgid "invalid reference: %s"
 msgstr "μη έγκυρη αναφορά: %s"
 
-#: src/scan-code.l:538
+#: src/scan-code.l:505
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 "συντακτικό σφάλμα μετά «%c», αναμενόταν ακέραιος, γράμμα, «_», «[», ή «$»"
 
-#: src/scan-code.l:544
+#: src/scan-code.l:511
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr "σύμβολο δεν βρέθηκε στην παραγωγή πριν $%d: %.*s"
 
-#: src/scan-code.l:549
+#: src/scan-code.l:516
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr "σύμβολο δεν βρέθηκε στην παραγωγή: %.*s"
 
-#: src/scan-code.l:564
+#: src/scan-code.l:531
 #, c-format
 msgid "misleading reference: %s"
 msgstr "παραπλανητική αναφορά: %s"
 
-#: src/scan-code.l:580
+#: src/scan-code.l:547
 #, c-format
 msgid "ambiguous reference: %s"
 msgstr "διφορούμενη αναφορά: %s"
 
-#: src/scan-code.l:616
+#: src/scan-code.l:583
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "ρητή δήλωση τύπου δόθηκε σε γραμματική χωρίς τύπους"
 
-#: src/scan-code.l:675
+#: src/scan-code.l:638
 #, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$$ για την midrule στο $%d του «%s» δεν έχει δηλωμένο τύπο"
 
-#: src/scan-code.l:681
+#: src/scan-code.l:644
 #, c-format
 msgid "$$ of %s has no declared type"
 msgstr "$$ του «%s» δεν έχει δηλωμένο τύπο"
 
-#: src/scan-code.l:703
+#: src/scan-code.l:670
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s του %s δεν έχει δηλωμένο τύπο"
 
-#: src/scan-gram.l:186
+#: src/scan-code.l:693
+#, c-format
+msgid "multiple occurrences of $%d with api.value.automove"
+msgstr "πολλαπλές παρουσίες $%d με api.value.automove"
+
+#: src/scan-gram.l:194
 #, c-format
 msgid "stray ',' treated as white space"
 msgstr "μοναχικό « , » θεωρήθηκε ως λευκό διάστημα"
 
-#: src/scan-gram.l:276
+#: src/scan-gram.l:291
 #, c-format
 msgid "invalid directive: %s"
 msgstr "μη έγκυρη οδηγία: %s"
 
-#: src/scan-gram.l:302
+#: src/scan-gram.l:312
 #, c-format
 msgid "invalid identifier: %s"
 msgstr "μη έγκυρη οδηγία: %s"
 
-#: src/scan-gram.l:354
+#: src/scan-gram.l:364
 msgid "invalid character"
 msgid_plural "invalid characters"
 msgstr[0] "μη έγκυρος χαρακτήρας: %s"
 msgstr[1] "μη έγκυροι χαρακτήρες: %s"
 
-#: src/scan-gram.l:372
+#: src/scan-gram.l:382
 #, c-format
 msgid "invalid null character"
 msgstr "μη έγκυρος μηδενικός χαρακτήρας"
 
-#: src/scan-gram.l:425
+#: src/scan-gram.l:436
 #, c-format
 msgid "unexpected identifier in bracketed name: %s"
 msgstr "μη αναμενόμενο identifier στο όνομα εντός αγκυλών: %s"
 
-#: src/scan-gram.l:447
+#: src/scan-gram.l:458
 #, c-format
 msgid "an identifier expected"
 msgstr "αναμενόταν identifier"
 
-#: src/scan-gram.l:452
+#: src/scan-gram.l:463
 msgid "invalid character in bracketed name"
 msgid_plural "invalid characters in bracketed name"
 msgstr[0] "μη έγκυρος χαρακτήρας: %s"
 msgstr[1] "μη έγκυροι χαρακτήρες: %s"
 
-#: src/scan-gram.l:544
+#: src/scan-gram.l:534
+#, c-format
+msgid "POSIX Yacc does not support string literals"
+msgstr "Το POSIX Yacc δεν υποστηρίζει string literals"
+
+#: src/scan-gram.l:556
 #, c-format
 msgid "empty character literal"
 msgstr "κενό character literal"
 
-#: src/scan-gram.l:550
+#: src/scan-gram.l:562
 #, c-format
 msgid "extra characters in character literal"
 msgstr "έξτρα χαρακτήρες σε character literal"
 
-#: src/scan-gram.l:596 src/scan-gram.l:606 src/scan-gram.l:626
+#: src/scan-gram.l:609 src/scan-gram.l:619 src/scan-gram.l:639
 #, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "μη έγκυρος μηδενικός χαρακτήρας: %s"
 
-#: src/scan-gram.l:638
+#: src/scan-gram.l:651
 #, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "μη έγκυρος χαρακτήρας: %s"
 
-#: src/scan-gram.l:984
+#: src/scan-gram.l:870
+#, c-format
+msgid "POSIX Yacc does not support hexadecimal literals"
+msgstr "Το POSIX Yacc δεν υποστηρίζει δεκαεξαδικά literals"
+
+#: src/scan-gram.l:1006
 #, c-format
 msgid "missing %s at end of file"
 msgstr "στο τέλος του αρχείου λείπει «%s»"
 
-#: src/scan-gram.l:995
+#: src/scan-gram.l:1017
 #, c-format
 msgid "missing %s at end of line"
 msgstr "στο τέλος της γραμμής λείπει «%s»"
 
-#: src/scan-skel.l:139
+#: src/scan-skel.l:140
 #, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr "unclosed %s οδηγία στο σκελετό"
 
-#: src/scan-skel.l:256
+#: src/scan-skel.l:257
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "πολύ λίγα ορίσματα για την οδηγία %s στο σκελετό"
 
-#: src/scan-skel.l:263
+#: src/scan-skel.l:264
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "πάρα πολλά ορίσματα για την οδηγία %s στο σκελετό"
 
-#: src/symtab.c:75
+#: src/symtab.c:100
 #, c-format
 msgid "POSIX Yacc forbids dashes in symbol names: %s"
 msgstr "POSIX Yacc απαγορεύει τις παύλες στα ονόματα συμβόλων: %s"
 
-#: src/symtab.c:97
+#: src/symtab.c:110
 #, c-format
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr "πάρα πολλά σύμβολα στη γραμματική εισόδου (το όριο είναι %d)"
 
-#: src/symtab.c:250
+#: src/symtab.c:285
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "δήλωση ξανά του %s για %s"
 
-#: src/symtab.c:263
+#: src/symtab.c:298
 #, c-format
 msgid "%s redeclaration for <%s>"
 msgstr "δήλωση ξανά του %s για <%s>"
 
-#: src/symtab.c:392
+#: src/symtab.c:310
 #, c-format
-msgid "symbol %s redefined"
-msgstr "το σύμβολο %s ανακαθορίστηκε"
+msgid "symbol %s redeclared as a token"
+msgstr "το σύμβολο %s ξαναδηλώθηκε ως λεκτική μονάδα"
 
-#: src/symtab.c:407
+#: src/symtab.c:311
+#, c-format
+msgid "symbol %s redeclared as a nonterminal"
+msgstr "το σύμβολο %s ξαναδηλώθηκε ως nonterminal"
+
+#: src/symtab.c:465
 #, c-format
 msgid "symbol %s redeclared"
 msgstr "το σύμβολο %s ξαναδηλώθηκε"
 
-#: src/symtab.c:429
+#: src/symtab.c:483
+#, c-format
+msgid "nonterminals cannot be given an explicit number"
+msgstr "nonterminals cannot be given an explicit number"
+
+#: src/symtab.c:486
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "ορισμός ξανά του αριθμού λεκτικής μονάδας του %s"
 
-#: src/symtab.c:459
+#: src/symtab.c:519
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
 "το σύμβολο %s χρησιμοποιείται, αλλά δεν καθορίζεται ως λεκτική μονάδα και "
 "δεν διαθέτει κανόνες"
 
-#: src/symtab.c:497
+#: src/symtab.c:553
 #, c-format
 msgid "useless %s for type <%s>"
 msgstr "άχρηστο %s για τύπο <%s>"
 
-#: src/symtab.c:502
+#: src/symtab.c:558
 #, c-format
 msgid "type <%s> is used, but is not associated to any symbol"
 msgstr ""
 "το σύμβολο %s χρησιμοποιείται, αλλά δεν καθορίζεται ως λεκτική μονάδα και "
-"δεν διαθέτει κανόνες"
+"δεν\n"
+" διαθέτει κανόνες"
 
-#: src/symtab.c:527
+#: src/symtab.c:619
+#, c-format
+msgid "nonterminals cannot be given a string alias"
+msgstr "nonterminals cannot be given a string alias"
+
+#: src/symtab.c:622
 #, c-format
 msgid "symbol %s used more than once as a literal string"
 msgstr ""
 "το σύμβολο «%s» χρησιμοποιήθηκε περισσότερες από μια φορές ως κυριολεκτικό "
 "αλφαριθμητικό"
 
-#: src/symtab.c:530
+#: src/symtab.c:625
 #, c-format
 msgid "symbol %s given more than one literal string"
 msgstr "το σύμβολο «%s» έδωσε περισσότερα του ενός κυριολεκτικά αλφαριθμητικά"
 
-#: src/symtab.c:629
+#: src/symtab.c:667
 #, c-format
 msgid "user token number %d redeclaration for %s"
 msgstr "δήλωση ξανά του αριθμού λεκτικής μονάδας %d για %s"
 
-#: src/symtab.c:633
+#: src/symtab.c:671
 #, c-format
 msgid "previous declaration for %s"
 msgstr "προηγούμενη δήλωση για %s"
 
-#: src/symtab.c:1014
+#: src/symtab.c:1038
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "το σύμβολο εκκίνησης %s δεν είναι καθορισμένο"
 
-#: src/symtab.c:1018
+#: src/symtab.c:1042
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "το σύμβολο εκκίνησης  %s είναι λεκτική μονάδα"
 
-#: src/symtab.c:1193
+#: src/symtab.c:1213
 #, c-format
 msgid "useless precedence and associativity for %s"
 msgstr "άχρηστη προτεραιότητα και προσεταιριστικότητα για %s"
 
-#: src/symtab.c:1196
+#: src/symtab.c:1216
 #, c-format
 msgid "useless precedence for %s"
 msgstr "άχρηστη προτεραιότητα για %s"
 
-#: src/symtab.c:1200
+#: src/symtab.c:1220
 #, c-format
 msgid "useless associativity for %s, use %%precedence"
 msgstr "άχρηστη προσεταιριστικότητα για %s, χρήση προτεραιότητας %%"
-
-#: djgpp/subpipe.c:63 djgpp/subpipe.c:286 djgpp/subpipe.c:288
-#, c-format
-msgid "removing of '%s' failed"
-msgstr "αποτυχία αφαίρεσης «%s»"
-
-#: djgpp/subpipe.c:85 djgpp/subpipe.c:92
-#, c-format
-msgid "creation of a temporary file failed"
-msgstr "αποτυχία δημιουργίας προσωρινού αρχείου"
-
-#: djgpp/subpipe.c:127
-#, c-format
-msgid "saving stdin failed"
-msgstr "αποτυχία διάσωσης stdin"
-
-#: djgpp/subpipe.c:131
-#, c-format
-msgid "saving stdout failed"
-msgstr "αποτυχία διάσωσης stdout"
-
-#: djgpp/subpipe.c:153 djgpp/subpipe.c:197 djgpp/subpipe.c:258
-#, c-format
-msgid "opening of tmpfile failed"
-msgstr "αποτυχία ανοίγματος tmpfile"
-
-#: djgpp/subpipe.c:157
-#, c-format
-msgid "redirecting bison's stdout to the temporary file failed"
-msgstr "αποτυχία ανακατεύθυνσης stdout του bison στο προσωρινό αρχείο"
-
-#: djgpp/subpipe.c:201
-#, c-format
-msgid "redirecting m4's stdin from the temporary file failed"
-msgstr "αποτυχία ανακατεύθυνσης m4's stdin από το προσωρινό αρχείο"
-
-#: djgpp/subpipe.c:212
-#, c-format
-msgid "opening of a temporary file failed"
-msgstr "αποτυχία ανοίγματος προσωρινού αρχείου"
-
-#: djgpp/subpipe.c:218
-#, c-format
-msgid "redirecting m4's stdout to a temporary file failed"
-msgstr "αποτυχία ανακατεύθυνσης m4's stdout σε προσωρινό αρχείο"
-
-#: djgpp/subpipe.c:234
-#, c-format
-msgid "subsidiary program '%s' interrupted"
-msgstr "βοηθιτικό πρόγραμμα «%s» διακόπηκε"
-
-#: djgpp/subpipe.c:241
-#, c-format
-msgid "subsidiary program '%s' not found"
-msgstr "βοηθητικό πρόγραμμα «%s» δεν βρέθηκε"
-
-#: djgpp/subpipe.c:265
-#, c-format
-msgid "redirecting bison's stdin from the temporary file failed"
-msgstr "αποτυχία ανακατεύθυνσης bison's stdin από το προσωρινό αρχείο"
-
-#: lib/argmatch.c:133
-#, c-format
-msgid "invalid argument %s for %s"
-msgstr "μη έγκυρο όρισμα %s για %s"
-
-#: lib/argmatch.c:134
-#, c-format
-msgid "ambiguous argument %s for %s"
-msgstr "ασαφές όρισμα %s για %s"
-
-#: lib/argmatch.c:153
-msgid "Valid arguments are:"
-msgstr "Έγκυρα ορίσματα είναι:"
-
-#: lib/bitset_stats.c:177
-#, c-format
-msgid "%u bitset_allocs, %u freed (%.2f%%).\n"
-msgstr "%u bitset_allocs, %u ελευθερώθηκαν (%.2f%%).\n"
-
-#: lib/bitset_stats.c:180
-#, c-format
-msgid "%u bitset_sets, %u cached (%.2f%%)\n"
-msgstr "%u bitset_sets, %u στη βοηθητική μνήμη (%.2f%%)\n"
-
-#: lib/bitset_stats.c:183
-#, c-format
-msgid "%u bitset_resets, %u cached (%.2f%%)\n"
-msgstr "%u bitset_resets, %u στη βοηθητική μνήμη (%.2f%%)\n"
-
-#: lib/bitset_stats.c:186
-#, c-format
-msgid "%u bitset_tests, %u cached (%.2f%%)\n"
-msgstr "%u bitset_tests, %u στη βοηθητική μνήμη (%.2f%%)\n"
-
-#: lib/bitset_stats.c:190
-#, c-format
-msgid "%u bitset_lists\n"
-msgstr "%u bitset_lists\n"
-
-#: lib/bitset_stats.c:192
-msgid "count log histogram\n"
-msgstr "ιστόγραμμα μετρήσεων\n"
-
-#: lib/bitset_stats.c:195
-msgid "size log histogram\n"
-msgstr "ιστόγραμμα μεγεθών\n"
-
-#: lib/bitset_stats.c:198
-msgid "density histogram\n"
-msgstr "ιστόγραμμα πυκνότητας\n"
-
-#: lib/bitset_stats.c:212
-#, c-format
-msgid ""
-"Bitset statistics:\n"
-"\n"
-msgstr ""
-"Στατιστικές των Bitset:\n"
-"\n"
-
-#: lib/bitset_stats.c:215
-#, c-format
-msgid "Accumulated runs = %u\n"
-msgstr "Συσσωρευμένα τρεξίματα = %u\n"
-
-#: lib/bitset_stats.c:259 lib/bitset_stats.c:264
-msgid "cannot read stats file"
-msgstr "Αδυναμία ανάγνωσης αρχείου στατιστικών"
-
-#: lib/bitset_stats.c:261
-#, c-format
-msgid "bad stats file size\n"
-msgstr "Λάθος μέγεθος αρχείου με στατιστικά.\n"
-
-#: lib/bitset_stats.c:287 lib/bitset_stats.c:289
-msgid "cannot write stats file"
-msgstr "Δεν μπόρεσα να γράψω το αρχείο με τα στατιστικά."
-
-#: lib/bitset_stats.c:292
-msgid "cannot open stats file for writing"
-msgstr "Δεν μπόρεσα να ανοίξω για γράψιμο το αρχείο με τα στατιστικά."
-
-#: lib/closeout.c:112
-msgid "write error"
-msgstr "σφάλμα εγγραφής"
-
-#: lib/error.c:191
-msgid "Unknown system error"
-msgstr "Άγνωστο σφάλμα συστήματος"
-
-#: lib/getopt.c:547 lib/getopt.c:576
-#, c-format
-msgid "%s: option '%s' is ambiguous; possibilities:"
-msgstr "%s: η επιλογή «%s» είναι ασαφής· δυνατότητες:"
-
-#: lib/getopt.c:624 lib/getopt.c:628
-#, c-format
-msgid "%s: option '--%s' doesn't allow an argument\n"
-msgstr "%s: η επιλογή «--%s» δεν επιτρέπει όρισμα\n"
-
-#: lib/getopt.c:637 lib/getopt.c:642
-#, c-format
-msgid "%s: option '%c%s' doesn't allow an argument\n"
-msgstr "%s: η επιλογή «%c%s» δεν επιτρέπει όρισμα\n"
-
-#: lib/getopt.c:685 lib/getopt.c:704
-#, c-format
-msgid "%s: option '--%s' requires an argument\n"
-msgstr "%s: η επιλογή «--%s» απαιτεί όρισμα\n"
-
-#: lib/getopt.c:742 lib/getopt.c:745
-#, c-format
-msgid "%s: unrecognized option '--%s'\n"
-msgstr "%s: άγνωστη επιλογή «--%s»\n"
-
-#: lib/getopt.c:753 lib/getopt.c:756
-#, c-format
-msgid "%s: unrecognized option '%c%s'\n"
-msgstr "%s: άγνωστη επιλογή «%c%s»\n"
-
-#: lib/getopt.c:805 lib/getopt.c:808
-#, c-format
-msgid "%s: invalid option -- '%c'\n"
-msgstr "%s: μη έγκυρη επιλογή -- «%c»\n"
-
-#: lib/getopt.c:861 lib/getopt.c:878 lib/getopt.c:1088 lib/getopt.c:1106
-#, c-format
-msgid "%s: option requires an argument -- '%c'\n"
-msgstr "%s: η επιλογή απαιτεί όρισμα -- %c\n"
-
-#: lib/getopt.c:934 lib/getopt.c:950
-#, c-format
-msgid "%s: option '-W %s' is ambiguous\n"
-msgstr "%s: η επιλογή «-W %s» είναι ασαφής\n"
-
-#: lib/getopt.c:974 lib/getopt.c:992
-#, c-format
-msgid "%s: option '-W %s' doesn't allow an argument\n"
-msgstr "%s: η επιλογή «-W %s» δεν επιτρέπει όρισμα\n"
-
-#: lib/getopt.c:1013 lib/getopt.c:1031
-#, c-format
-msgid "%s: option '-W %s' requires an argument\n"
-msgstr "%s: η επιλογή '-W %s' απαιτεί ένα όρισμα\n"
-
-#: lib/obstack.c:338 lib/obstack.c:340 lib/xalloc-die.c:34
-msgid "memory exhausted"
-msgstr "εξαντλημένη μνήμη"
-
-#: lib/spawn-pipe.c:135 lib/spawn-pipe.c:138 lib/spawn-pipe.c:259
-#: lib/spawn-pipe.c:262
-#, c-format
-msgid "cannot create pipe"
-msgstr "δεν μπορώ να κλείσω το αρχείο"
-
-#: lib/spawn-pipe.c:229 lib/spawn-pipe.c:343 lib/wait-process.c:282
-#: lib/wait-process.c:356
-#, c-format
-msgid "%s subprocess failed"
-msgstr "αποτυχία υποδιεργασίας %s"
-
-#. TRANSLATORS:
-#. Get translations for open and closing quotation marks.
-#. The message catalog should translate "`" to a left
-#. quotation mark suitable for the locale, and similarly for
-#. "'".  For example, a French Unicode local should translate
-#. these to U+00AB (LEFT-POINTING DOUBLE ANGLE
-#. QUOTATION MARK), and U+00BB (RIGHT-POINTING DOUBLE ANGLE
-#. QUOTATION MARK), respectively.
-#.
-#. If the catalog has no translation, we will try to
-#. use Unicode U+2018 (LEFT SINGLE QUOTATION MARK) and
-#. Unicode U+2019 (RIGHT SINGLE QUOTATION MARK).  If the
-#. current locale is not Unicode, locale_quoting_style
-#. will quote 'like this', and clocale_quoting_style will
-#. quote "like this".  You should always include translations
-#. for "`" and "'" even if U+2018 and U+2019 are appropriate
-#. for your locale.
-#.
-#. If you don't know what to put here, please see
-#. <http://en.wikipedia.org/wiki/Quotation_marks_in_other_languages>
-#. and use glyphs suitable for your language.
-#: lib/quotearg.c:312
-msgid "`"
-msgstr "«"
-
-#: lib/quotearg.c:313
-msgid "'"
-msgstr "»"
-
-#: lib/timevar.c:475
-msgid ""
-"\n"
-"Execution times (seconds)\n"
-msgstr ""
-"\n"
-"Χρόνος εκτέλεσης (δευτερόλεπτα)\n"
-
-#: lib/timevar.c:525
-msgid " TOTAL                 :"
-msgstr "ΣΥΝΟΛΟ                 :"
-
-#: lib/timevar.c:561
-#, c-format
-msgid "time in %s: %ld.%06ld (%ld%%)\n"
-msgstr "χρόνος σε %s: %ld.%06ld (%ld%%)\n"
-
-#: lib/w32spawn.h:43
-#, c-format
-msgid "_open_osfhandle failed"
-msgstr "αποτυχία _open_osfhandle"
-
-#: lib/w32spawn.h:84
-#, c-format
-msgid "cannot restore fd %d: dup2 failed"
-msgstr "δεν μπορώ να επαναφέρω τον fd %d: αποτυχία dup2"
-
-#: lib/wait-process.c:223 lib/wait-process.c:255 lib/wait-process.c:317
-#, c-format
-msgid "%s subprocess"
-msgstr " υποδιεργασία %s"
-
-#: lib/wait-process.c:274 lib/wait-process.c:346
-#, c-format
-msgid "%s subprocess got fatal signal %d"
-msgstr "υποδιεργασία %s δέχτηκε μοιραίο σήμα %d"
-
-#~ msgid "invalid $ value: $%d"
-#~ msgstr "τιμή $ μη έγκυρη: $%d"

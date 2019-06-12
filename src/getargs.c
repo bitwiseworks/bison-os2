@@ -1,7 +1,7 @@
 /* Parse command line arguments for Bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2000-2015 Free Software
-   Foundation, Inc.
+   Copyright (C) 1984, 1986, 1989, 1992, 2000-2015, 2018-2019 Free
+   Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -19,8 +19,9 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
+#include "getargs.h"
+
 #include "system.h"
-#include "output.h"
 
 #include <argmatch.h>
 #include <c-strcase.h>
@@ -28,20 +29,23 @@
 #include <error.h>
 #include <getopt.h>
 #include <progname.h>
+#include <quote.h>
+#include <textstyle.h>
 
 #include "complain.h"
 #include "files.h"
-#include "getargs.h"
 #include "muscle-tab.h"
-#include "quote.h"
+#include "output.h"
 #include "uniqstr.h"
 
-bool defines_flag;
-bool graph_flag;
-bool xml_flag;
-bool no_lines_flag;
-bool token_table_flag;
-bool yacc_flag; /* for -y */
+bool defines_flag = false;
+bool graph_flag = false;
+bool xml_flag = false;
+bool no_lines_flag = false;
+bool token_table_flag = false;
+location yacc_loc = EMPTY_LOCATION_INIT;
+bool update_flag = false; /* for -u */
+bool color_debug = false;
 
 bool nondeterministic_parser = false;
 bool glr_parser = false;
@@ -51,8 +55,10 @@ int report_flag = report_none;
 int trace_flag = trace_none;
 
 static struct bison_language const valid_languages[] = {
-  { "c", "c-skel.m4", ".c", ".h", true },
-  { "c++", "c++-skel.m4", ".cc", ".hh", true },
+  /* lang,  skeleton,       ext,     hdr,     add_tab */
+  { "c",    "c-skel.m4",    ".c",    ".h",    true },
+  { "c++",  "c++-skel.m4",  ".cc",   ".hh",   true },
+  { "d",    "d-skel.m4",    ".d",    ".d",    false },
   { "java", "java-skel.m4", ".java", ".java", false },
   { "", "", "", "", false }
 };
@@ -64,7 +70,7 @@ struct bison_language const *language = &valid_languages[0];
 
 /** Decode an option's key.
  *
- *  \param option   option being decoded.
+ *  \param opt      option being decoded.
  *  \param keys     array of valid subarguments.
  *  \param values   array of corresponding (int) values.
  *  \param all      the all value.
@@ -79,11 +85,11 @@ struct bison_language const *language = &valid_languages[0];
  *  flags from \c all.  Thus no-none = all and no-all = none.
  */
 static void
-flag_argmatch (const char *option,
-               const char * const keys[], const int values[],
+flag_argmatch (const char *opt,
+               const char *const keys[], const int values[],
                int all, int *flags, char *arg, size_t no)
 {
-  int value = XARGMATCH (option, arg + no, keys, values);
+  int value = XARGMATCH (opt, arg + no, keys, values);
 
   /* -rnone == -rno-all, and -rno-none == -rall.  */
   if (!value)
@@ -100,7 +106,7 @@ flag_argmatch (const char *option,
 
 /** Decode an option's set of keys.
  *
- *  \param option   option being decoded.
+ *  \param opt      option being decoded (e.g., --report).
  *  \param keys     array of valid subarguments.
  *  \param values   array of corresponding (int) values.
  *  \param all      the all value.
@@ -109,7 +115,7 @@ flag_argmatch (const char *option,
  *                  If 0, then activate all the flags.
  */
 static void
-flags_argmatch (const char *option,
+flags_argmatch (const char *opt,
                 const char * const keys[], const int values[],
                 int all, int *flags, char *args)
 {
@@ -117,7 +123,7 @@ flags_argmatch (const char *option,
     for (args = strtok (args, ","); args; args = strtok (NULL, ","))
       {
         size_t no = STRPREFIX_LIT ("no-", args) ? 3 : 0;
-        flag_argmatch (option, keys,
+        flag_argmatch (opt, keys,
                        values, all, flags, args, no);
       }
   else
@@ -127,7 +133,7 @@ flags_argmatch (const char *option,
 
 /** Decode a set of sub arguments.
  *
- *  \param FlagName  the flag familly to update.
+ *  \param FlagName  the flag family to update.
  *  \param Args      the effective sub arguments to decode.
  *  \param All       the "all" value.
  *
@@ -179,10 +185,12 @@ ARGMATCH_VERIFY (report_args, report_types);
 static const char * const trace_args[] =
 {
   "none       - no traces",
+  "locations  - full display of the locations",
   "scan       - grammar scanner traces",
   "parse      - grammar parser traces",
   "automaton  - construction of the automaton",
   "bitsets    - use of bitsets",
+  "closure    - input/output of closure",
   "grammar    - reading, reducing the grammar",
   "resource   - memory consumption (where available)",
   "sets       - grammar sets: firsts, nullable etc.",
@@ -199,10 +207,12 @@ static const char * const trace_args[] =
 static const int trace_types[] =
 {
   trace_none,
+  trace_locations,
   trace_scan,
   trace_parse,
   trace_automaton,
   trace_bitsets,
+  trace_closure,
   trace_grammar,
   trace_resource,
   trace_sets,
@@ -226,6 +236,8 @@ static const char * const feature_args[] =
 {
   "none",
   "caret", "diagnostics-show-caret",
+  "fixit", "diagnostics-parseable-fixits",
+  "syntax-only",
   "all",
   0
 };
@@ -234,6 +246,8 @@ static const int feature_types[] =
 {
   feature_none,
   feature_caret, feature_caret,
+  feature_fixit_parsable, feature_fixit_parsable,
+  feature_syntax_only,
   feature_all
 };
 
@@ -279,10 +293,13 @@ Operation modes:\n\
   -h, --help                 display this help and exit\n\
   -V, --version              output version information and exit\n\
       --print-localedir      output directory containing locale-dependent data\n\
+                             and exit\n\
       --print-datadir        output directory containing skeletons and XSLT\n\
+                             and exit\n\
+  -u, --update               apply fixes to the source grammar file and exit\n\
   -y, --yacc                 emulate POSIX Yacc\n\
   -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n\
-  -f, --feature[=FEATURE]    activate miscellaneous features\n\
+  -f, --feature[=FEATURES]   activate miscellaneous features\n\
 \n\
 "), stdout);
 
@@ -321,13 +338,13 @@ Output:\n\
 
       fputs (_("\
 Warning categories include:\n\
-  'midrule-values'    unset or unused midrule values\n\
-  'yacc'              incompatibilities with POSIX Yacc\n\
   'conflicts-sr'      S/R conflicts (enabled by default)\n\
   'conflicts-rr'      R/R conflicts (enabled by default)\n\
   'deprecated'        obsolete constructs\n\
   'empty-rule'        empty rules without %empty\n\
+  'midrule-values'    unset or unused midrule values\n\
   'precedence'        useless precedence and associativity\n\
+  'yacc'              incompatibilities with POSIX Yacc\n\
   'other'             all other warnings (enabled by default)\n\
   'all'               all the warnings except 'yacc'\n\
   'no-CATEGORY'       turn off warnings in CATEGORY\n\
@@ -348,10 +365,17 @@ THINGS is a list of comma separated words that can include:\n\
       putc ('\n', stdout);
 
       fputs (_("\
-FEATURE is a list of comma separated words that can include:\n\
-  'caret'        show errors with carets\n\
-  'all'          all of the above\n\
-  'none'         disable all of the above\n\
+FEATURES is a list of comma separated words that can include:\n\
+  'caret', 'diagnostics-show-caret'\n\
+    show errors with carets\n\
+  'fixit', 'diagnostics-parseable-fixits'\n\
+    show machine-readable fixes\n\
+  'syntax-only'\n\
+    do not generate any file\n\
+  'all'\n\
+    all of the above\n\
+  'none'\n\
+    disable all of the above\n\
   "), stdout);
 
       putc ('\n', stdout);
@@ -360,6 +384,8 @@ FEATURE is a list of comma separated words that can include:\n\
       fputs (_("General help using GNU software: "
                "<http://www.gnu.org/gethelp/>.\n"),
              stdout);
+
+#if (defined __GLIBC__ && __GLIBC__ >= 2) && !defined __UCLIBC__
       /* Don't output this redundant message for English locales.
          Note we still output for 'C' so that it gets included in the
          man page.  */
@@ -372,6 +398,7 @@ FEATURE is a list of comma separated words that can include:\n\
            email address.  */
         fputs (_("Report translation bugs to "
                  "<http://translationproject.org/team/>.\n"), stdout);
+#endif
       fputs (_("For complete documentation, run: info bison.\n"), stdout);
     }
 
@@ -429,8 +456,7 @@ language_argmatch (char const *arg, int prio, location loc)
 
   if (prio < language_prio)
     {
-      int i;
-      for (i = 0; valid_languages[i].language[0]; i++)
+      for (int i = 0; valid_languages[i].language[0]; ++i)
         if (c_strcasecmp (arg, valid_languages[i].language) == 0)
           {
             language_prio = prio;
@@ -472,6 +498,7 @@ static char const short_options[] =
   "p:"
   "r:"
   "t"
+  "u"   /* --update */
   "v"
   "x::"
   "y"
@@ -480,10 +507,12 @@ static char const short_options[] =
 /* Values for long options that do not have single-letter equivalents.  */
 enum
 {
-  LOCATIONS_OPTION = CHAR_MAX + 1,
-  PRINT_LOCALEDIR_OPTION,
+  COLOR_OPTION = CHAR_MAX + 1,
+  LOCATIONS_OPTION,
   PRINT_DATADIR_OPTION,
-  REPORT_FILE_OPTION
+  PRINT_LOCALEDIR_OPTION,
+  REPORT_FILE_OPTION,
+  STYLE_OPTION
 };
 
 static struct option const long_options[] =
@@ -493,6 +522,7 @@ static struct option const long_options[] =
   { "version",         no_argument,       0,   'V' },
   { "print-localedir", no_argument,       0,   PRINT_LOCALEDIR_OPTION },
   { "print-datadir",   no_argument,       0,   PRINT_DATADIR_OPTION   },
+  { "update",          no_argument,       0,   'u' },
   { "warnings",        optional_argument, 0,   'W' },
 
   /* Parser. */
@@ -509,7 +539,9 @@ static struct option const long_options[] =
   { "verbose",     no_argument,         0,   'v' },
 
   /* Hidden. */
-  { "trace",         optional_argument,   0,     'T' },
+  { "trace",       optional_argument,   0,  'T' },
+  { "color",       optional_argument,   0,  COLOR_OPTION },
+  { "style",       optional_argument,   0,  STYLE_OPTION },
 
   /* Output.  */
   { "defines",     optional_argument,   0,   'd' },
@@ -547,17 +579,46 @@ command_line_location (void)
 {
   location res;
   /* "<command line>" is used in GCC's messages about -D. */
-  boundary_set (&res.start, uniqstr_new ("<command line>"), optind - 1, -1);
+  boundary_set (&res.start, uniqstr_new ("<command line>"), optind - 1, -1, -1);
   res.end = res.start;
   return res;
+}
+
+
+/* Handle the command line options for color support.  Do it early, so
+   that error messages from getargs be also colored as per the user's
+   request.  This is consistent with the way GCC and Clang behave.  */
+
+static void
+getargs_colors (int argc, char *argv[])
+{
+  for (int i = 1; i < argc; i++)
+    {
+      const char *arg = argv[i];
+      if (STRPREFIX_LIT ("--color=", arg))
+        {
+          const char *color = arg + strlen ("--color=");
+          if (STREQ (color, "debug"))
+            color_debug = true;
+          else
+            handle_color_option (color);
+        }
+      else if (STRPREFIX_LIT ("--style=", arg))
+        {
+          const char *style = arg + strlen ("--style=");
+          handle_style_option (style);
+        }
+    }
+  complain_init_color ();
 }
 
 
 void
 getargs (int argc, char *argv[])
 {
-  int c;
+  getargs_colors (argc, argv);
 
+  int c;
   while ((c = getopt_long (argc, argv, short_options, long_options, NULL))
          != -1)
     switch (c)
@@ -634,8 +695,8 @@ getargs (int argc, char *argv[])
         defines_flag = true;
         if (optarg)
           {
-            free (spec_defines_file);
-            spec_defines_file = xstrdup (AS_FILE_NAME (optarg));
+            free (spec_header_file);
+            spec_header_file = xstrdup (AS_FILE_NAME (optarg));
           }
         break;
 
@@ -678,6 +739,11 @@ getargs (int argc, char *argv[])
                                       MUSCLE_PERCENT_DEFINE_D);
         break;
 
+      case 'u':
+        update_flag = true;
+        feature_flag |= feature_syntax_only;
+        break;
+
       case 'v':
         report_flag |= report_states;
         break;
@@ -692,8 +758,12 @@ getargs (int argc, char *argv[])
         break;
 
       case 'y':
-        warning_argmatch ("error=yacc", 0, 6);
-        yacc_flag = true;
+        warning_argmatch ("yacc", 0, 0);
+        yacc_loc = command_line_location ();
+        break;
+
+      case COLOR_OPTION:
+        /* Handled in getargs_colors. */
         break;
 
       case LOCATIONS_OPTION:
@@ -714,6 +784,10 @@ getargs (int argc, char *argv[])
         spec_verbose_file = xstrdup (AS_FILE_NAME (optarg));
         break;
 
+      case STYLE_OPTION:
+        /* Handled in getargs_colors. */
+        break;
+
       default:
         usage (EXIT_FAILURE);
       }
@@ -721,7 +795,7 @@ getargs (int argc, char *argv[])
   if (argc - optind != 1)
     {
       if (argc - optind < 1)
-        error (0, 0, _("%s: missing operand"), quotearg_colon (argv[argc - 1]));
+        error (0, 0, _("missing operand"));
       else
         error (0, 0, _("extra operand %s"), quote (argv[optind + 1]));
       usage (EXIT_FAILURE);
