@@ -1,6 +1,6 @@
 /* Bison Grammar Scanner                             -*- C -*-
 
-   Copyright (C) 2002-2015 Free Software Foundation, Inc.
+   Copyright (C) 2002-2015, 2018-2019 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -21,27 +21,26 @@
 %option prefix="gram_" outfile="lex.yy.c"
 
 %{
-/* Work around a bug in flex 2.5.31.  See Debian bug 333231
-   <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
-#undef gram_wrap
-#define gram_wrap() 1
-
-#define FLEX_PREFIX(Id) gram_ ## Id
-#include <src/flex-scanner.h>
+#include <c-ctype.h>
+#include <mbswidth.h>
+#include <quote.h>
+#include <quotearg.h>
 
 #include <src/complain.h>
 #include <src/files.h>
 #include <src/getargs.h>
 #include <src/gram.h>
-#include <quotearg.h>
 #include <src/reader.h>
+#include <src/scan-gram.h>
 #include <src/uniqstr.h>
 
-#include <c-ctype.h>
-#include <mbswidth.h>
-#include <quote.h>
+#define FLEX_PREFIX(Id) gram_ ## Id
+#include <src/flex-scanner.h>
 
-#include <src/scan-gram.h>
+/* Work around a bug in flex 2.5.31.  See Debian bug 333231
+   <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
+#undef gram_wrap
+#define gram_wrap() 1
 
 #define YY_DECL GRAM_LEX_DECL
 
@@ -53,38 +52,43 @@ static boundary scanner_cursor;
 static size_t no_cr_read (FILE *, char *, size_t);
 #define YY_INPUT(buf, result, size) ((result) = no_cr_read (yyin, buf, size))
 
-#define RETURN_PERCENT_PARAM(Value)                     \
-  RETURN_VALUE(PERCENT_PARAM, param, param_ ## Value)
+/* Report that yytext is an extension, and evaluate to its token type.  */
+#define BISON_DIRECTIVE(Directive)                              \
+  (bison_directive (loc, yytext), PERCENT_ ## Directive)
 
-#define RETURN_PERCENT_FLAG(Value)                              \
-  RETURN_VALUE(PERCENT_FLAG, uniqstr, uniqstr_new (Value))
+#define RETURN_PERCENT_PARAM(Value)             \
+  RETURN_VALUE(PERCENT_PARAM, param_ ## Value)
 
-#define RETURN_VALUE(Token, Field, Value)       \
+#define RETURN_PERCENT_FLAG(Value)                      \
+  RETURN_VALUE(PERCENT_FLAG, uniqstr_new (Value))
+
+#define RETURN_VALUE(Token, Value)              \
   do {                                          \
-    val->Field = Value;                         \
+    val->Token = Value;                         \
     return Token;                               \
   } while (0)
 
 #define ROLLBACK_CURRENT_TOKEN                                  \
   do {                                                          \
     scanner_cursor.column -= mbsnwidth (yytext, yyleng, 0);     \
+    scanner_cursor.byte -= yyleng;                              \
     yyless (0);                                                 \
   } while (0)
 
 #define DEPRECATED(Msg)                                         \
   do {                                                          \
-    size_t i;                                                   \
     deprecated_directive (loc, yytext, Msg);                    \
     scanner_cursor.column -= mbsnwidth (Msg, strlen (Msg), 0);  \
-    for (i = strlen (Msg); i != 0; --i)                         \
+    scanner_cursor.byte -= strlen (Msg);                        \
+    for (size_t i = strlen (Msg); i != 0; --i)                  \
       unput (Msg[i - 1]);                                       \
   } while (0)
 
 /* A string representing the most recently saved token.  */
-static char *last_string;
+static char *last_string = NULL;
 
 /* Bracketed identifier. */
-static uniqstr bracketed_id_str = 0;
+static uniqstr bracketed_id_str = NULL;
 static location bracketed_id_loc;
 static boundary bracketed_id_start;
 static int bracketed_id_context_state = 0;
@@ -96,7 +100,7 @@ gram_scanner_last_string_free (void)
 }
 
 static void handle_syncline (char *, location);
-static unsigned long int scan_integer (char const *p, int base, location loc);
+static unsigned long scan_integer (char const *p, int base, location loc);
 static int convert_ucn_to_byte (char const *hex_text);
 static void unexpected_eof (boundary, char const *);
 static void unexpected_newline (boundary, char const *);
@@ -131,9 +135,12 @@ static void unexpected_newline (boundary, char const *);
 %x SC_BRACKETED_ID SC_RETURN_BRACKETED_ID
 
 letter    [.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_]
-notletter [^.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_]{-}[%\{]
 id        {letter}({letter}|[-0-9])*
 int       [0-9]+
+xint      0[xX][0-9abcdefABCDEF]+
+
+ /* UTF-8 Encoded Unicode Code Point, from Flex's documentation. */
+mbchar    [\x09\x0A\x0D\x20-\x7E]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEC\xEE\xEF]([\x80-\xBF]{2})|\xED[\x80-\x9F][\x80-\xBF]|\xF0[\x\90-\xBF]([\x80-\xBF]{2})|[\xF1-\xF3]([\x80-\xBF]{3})|\xF4[\x80-\x8F]([\x80-\xBF]{2})
 
 /* Zero or more instances of backslash-newline.  Following GCC, allow
    white space between the backslash and the newline.  */
@@ -141,7 +148,8 @@ splice   (\\[ \f\t\v]*\n)*
 
 /* An equal sign, with optional leading whitespaces. This is used in some
    deprecated constructs. */
-eqopt    ([[:space:]]*=)?
+sp       [[:space:]]*
+eqopt    ({sp}=)?
 
 %%
 %{
@@ -153,7 +161,7 @@ eqopt    ([[:space:]]*=)?
   int context_state PACIFY_CC (= 0);
 
   /* Location of most recent identifier, when applicable.  */
-  location id_loc PACIFY_CC (= empty_location);
+  location id_loc PACIFY_CC (= empty_loc);
 
   /* Where containing code started, when applicable.  Its initial
      value is relevant only when yylex is invoked in the SC_EPILOGUE
@@ -213,88 +221,90 @@ eqopt    ([[:space:]]*=)?
 
 <INITIAL>
 {
-  "%binary"                         return PERCENT_NONASSOC;
-  "%code"                           return PERCENT_CODE;
-  "%debug"                          RETURN_PERCENT_FLAG("parse.trace");
-  "%default-prec"                   return PERCENT_DEFAULT_PREC;
-  "%define"                         return PERCENT_DEFINE;
-  "%defines"                        return PERCENT_DEFINES;
-  "%destructor"                     return PERCENT_DESTRUCTOR;
-  "%dprec"                          return PERCENT_DPREC;
-  "%empty"                          return PERCENT_EMPTY;
-  "%error-verbose"                  return PERCENT_ERROR_VERBOSE;
-  "%expect"                         return PERCENT_EXPECT;
-  "%expect-rr"                      return PERCENT_EXPECT_RR;
-  "%file-prefix"                    return PERCENT_FILE_PREFIX;
-  "%fixed-output-files"             return PERCENT_YACC;
-  "%initial-action"                 return PERCENT_INITIAL_ACTION;
-  "%glr-parser"                     return PERCENT_GLR_PARSER;
-  "%language"                       return PERCENT_LANGUAGE;
+  "%binary"                         return BISON_DIRECTIVE (NONASSOC);
+  "%code"                           return BISON_DIRECTIVE (CODE);
+  "%debug"                          RETURN_PERCENT_FLAG ("parse.trace");
+  "%default-prec"                   return BISON_DIRECTIVE (DEFAULT_PREC);
+  "%define"                         return BISON_DIRECTIVE (DEFINE);
+  "%defines"                        return BISON_DIRECTIVE (DEFINES);
+  "%destructor"                     return BISON_DIRECTIVE (DESTRUCTOR);
+  "%dprec"                          return BISON_DIRECTIVE (DPREC);
+  "%empty"                          return BISON_DIRECTIVE (EMPTY);
+  "%expect"                         return BISON_DIRECTIVE (EXPECT);
+  "%expect-rr"                      return BISON_DIRECTIVE (EXPECT_RR);
+  "%file-prefix"                    RETURN_VALUE (PERCENT_FILE_PREFIX, uniqstr_new (yytext));
+  "%fixed-output-files"             RETURN_VALUE (PERCENT_YACC, uniqstr_new (yytext));
+  "%initial-action"                 return BISON_DIRECTIVE (INITIAL_ACTION);
+  "%glr-parser"                     return BISON_DIRECTIVE (GLR_PARSER);
+  "%language"                       return BISON_DIRECTIVE (LANGUAGE);
   "%left"                           return PERCENT_LEFT;
-  "%lex-param"                      RETURN_PERCENT_PARAM(lex);
-  "%locations"                      RETURN_PERCENT_FLAG("locations");
-  "%merge"                          return PERCENT_MERGE;
-  "%name-prefix"                    return PERCENT_NAME_PREFIX;
-  "%no-default-prec"                return PERCENT_NO_DEFAULT_PREC;
-  "%no-lines"                       return PERCENT_NO_LINES;
+  "%lex-param"                      RETURN_PERCENT_PARAM (lex);
+  "%locations"                      RETURN_PERCENT_FLAG ("locations");
+  "%merge"                          return BISON_DIRECTIVE (MERGE);
+  "%no-default-prec"                return BISON_DIRECTIVE (NO_DEFAULT_PREC);
+  "%no-lines"                       return BISON_DIRECTIVE (NO_LINES);
   "%nonassoc"                       return PERCENT_NONASSOC;
-  "%nondeterministic-parser"        return PERCENT_NONDETERMINISTIC_PARSER;
-  "%nterm"                          return PERCENT_NTERM;
-  "%output"                         return PERCENT_OUTPUT;
-  "%param"                          RETURN_PERCENT_PARAM(both);
-  "%parse-param"                    RETURN_PERCENT_PARAM(parse);
+  "%nondeterministic-parser"        return BISON_DIRECTIVE (NONDETERMINISTIC_PARSER);
+  "%nterm"                          return BISON_DIRECTIVE (NTERM);
+  "%output"                         return BISON_DIRECTIVE (OUTPUT);
+  "%param"                          RETURN_PERCENT_PARAM (both);
+  "%parse-param"                    RETURN_PERCENT_PARAM (parse);
   "%prec"                           return PERCENT_PREC;
-  "%precedence"                     return PERCENT_PRECEDENCE;
-  "%printer"                        return PERCENT_PRINTER;
-  "%pure-parser"                    RETURN_PERCENT_FLAG("api.pure");
-  "%require"                        return PERCENT_REQUIRE;
+  "%precedence"                     return BISON_DIRECTIVE (PRECEDENCE);
+  "%printer"                        return BISON_DIRECTIVE (PRINTER);
+  "%require"                        return BISON_DIRECTIVE (REQUIRE);
   "%right"                          return PERCENT_RIGHT;
-  "%skeleton"                       return PERCENT_SKELETON;
+  "%skeleton"                       return BISON_DIRECTIVE (SKELETON);
   "%start"                          return PERCENT_START;
-  "%term"                           return PERCENT_TOKEN;
+  "%term"                           return BISON_DIRECTIVE (TOKEN);
   "%token"                          return PERCENT_TOKEN;
-  "%token-table"                    return PERCENT_TOKEN_TABLE;
+  "%token-table"                    return BISON_DIRECTIVE (TOKEN_TABLE);
   "%type"                           return PERCENT_TYPE;
   "%union"                          return PERCENT_UNION;
-  "%verbose"                        return PERCENT_VERBOSE;
-  "%yacc"                           return PERCENT_YACC;
+  "%verbose"                        return BISON_DIRECTIVE (VERBOSE);
+  "%yacc"                           RETURN_VALUE (PERCENT_YACC, uniqstr_new (yytext));
 
-  /* deprecated */
-  "%default"[-_]"prec"              DEPRECATED("%default-prec");
-  "%error"[-_]"verbose"             DEPRECATED("%define parse.error verbose");
-  "%expect"[-_]"rr"                 DEPRECATED("%expect-rr");
-  "%file-prefix"{eqopt}             DEPRECATED("%file-prefix");
-  "%fixed"[-_]"output"[-_]"files"   DEPRECATED("%fixed-output-files");
-  "%name"[-_]"prefix"{eqopt}        DEPRECATED("%name-prefix");
-  "%no"[-_]"default"[-_]"prec"      DEPRECATED("%no-default-prec");
-  "%no"[-_]"lines"                  DEPRECATED("%no-lines");
-  "%output"{eqopt}                  DEPRECATED("%output");
-  "%pure"[-_]"parser"               DEPRECATED("%pure-parser");
-  "%token"[-_]"table"               DEPRECATED("%token-table");
+  /* Deprecated since Bison 2.3b (2008-05-27), but the warning is
+     issued only since Bison 3.4. */
+  "%pure"[-_]"parser"               RETURN_VALUE (PERCENT_PURE_PARSER, uniqstr_new (yytext));
+
+  /* Deprecated since Bison 3.0 (2013-07-25), but the warning is
+     issued only since Bison 3.3. */
+  "%error-verbose"                  RETURN_VALUE (PERCENT_ERROR_VERBOSE, uniqstr_new (yytext));
+
+  /* Deprecated since Bison 2.6 (2012-07-19), but the warning is
+     issued only since Bison 3.3. */
+  "%name"[-_]"prefix"{eqopt}{sp}    RETURN_VALUE (PERCENT_NAME_PREFIX, uniqstr_new (yytext));
+
+  /* Deprecated since Bison 2.7.90, 2012. */
+  "%default"[-_]"prec"              DEPRECATED ("%default-prec");
+  "%error"[-_]"verbose"             RETURN_VALUE (PERCENT_ERROR_VERBOSE, uniqstr_new (yytext));
+  "%expect"[-_]"rr"                 DEPRECATED ("%expect-rr");
+  "%file-prefix"{eqopt}             RETURN_VALUE (PERCENT_FILE_PREFIX, uniqstr_new (yytext));
+  "%fixed"[-_]"output"[-_]"files"   RETURN_VALUE (PERCENT_YACC, uniqstr_new (yytext));
+  "%no"[-_]"default"[-_]"prec"      DEPRECATED ("%no-default-prec");
+  "%no"[-_]"lines"                  DEPRECATED ("%no-lines");
+  "%output"{eqopt}                  DEPRECATED ("%output");
+  "%token"[-_]"table"               DEPRECATED ("%token-table");
 
   "%"{id} {
     complain (loc, complaint, _("invalid directive: %s"), quote (yytext));
   }
 
+  ":"                     return COLON;
   "="                     return EQUAL;
   "|"                     return PIPE;
   ";"                     return SEMICOLON;
 
   {id} {
-    val->uniqstr = uniqstr_new (yytext);
+    val->ID = uniqstr_new (yytext);
     id_loc = *loc;
     bracketed_id_str = NULL;
     BEGIN SC_AFTER_IDENTIFIER;
   }
 
-  {int} {
-    val->integer = scan_integer (yytext, 10, *loc);
-    return INT;
-  }
-  0[xX][0-9abcdefABCDEF]+ {
-    val->integer = scan_integer (yytext, 16, *loc);
-    return INT;
-  }
+  {int}      RETURN_VALUE (INT, scan_integer (yytext, 10, *loc));
+  {xint}     RETURN_VALUE (INT, scan_integer (yytext, 16, *loc));
 
   /* Identifiers may not start with a digit.  Yet, don't silently
      accept "1FOO" as "1 FOO".  */
@@ -395,6 +405,7 @@ eqopt    ([[:space:]]*=)?
       }
   }
   ":" {
+    ROLLBACK_CURRENT_TOKEN;
     BEGIN (bracketed_id_str ? SC_RETURN_BRACKETED_ID : INITIAL);
     *loc = id_loc;
     return ID_COLON;
@@ -437,7 +448,7 @@ eqopt    ([[:space:]]*=)?
       {
         if (INITIAL == bracketed_id_context_state)
           {
-            val->uniqstr = bracketed_id_str;
+            val->BRACKETED_ID = bracketed_id_str;
             bracketed_id_str = 0;
             *loc = bracketed_id_loc;
             return BRACKETED_ID;
@@ -464,7 +475,7 @@ eqopt    ([[:space:]]*=)?
 {
   . {
     ROLLBACK_CURRENT_TOKEN;
-    val->uniqstr = bracketed_id_str;
+    val->BRACKETED_ID = bracketed_id_str;
     bracketed_id_str = 0;
     *loc = bracketed_id_loc;
     BEGIN INITIAL;
@@ -517,10 +528,11 @@ eqopt    ([[:space:]]*=)?
 {
   "\"" {
     STRING_FINISH;
-    loc->start = token_start;
-    val->code = last_string;
     BEGIN INITIAL;
-    return STRING;
+    loc->start = token_start;
+    complain (loc, Wyacc,
+              _("POSIX Yacc does not support string literals"));
+    RETURN_VALUE (STRING, last_string);
   }
   <<EOF>>   unexpected_eof (token_start, "\"");
   "\n"      unexpected_newline (token_start, "\"");
@@ -536,14 +548,14 @@ eqopt    ([[:space:]]*=)?
   "'" {
     STRING_FINISH;
     loc->start = token_start;
-    val->character = last_string[0];
+    val->CHAR = last_string[0];
 
     /* FIXME: Eventually, make these errors.  */
     if (last_string[0] == '\0')
     {
       complain (loc, Wother, _("empty character literal"));
       /* '\0' seems dangerous even if we are about to complain.  */
-      val->character = '\'';
+      val->CHAR = '\'';
     }
     else if (last_string[1] != '\0')
       complain (loc, Wother,
@@ -570,7 +582,7 @@ eqopt    ([[:space:]]*=)?
       {
         STRING_FINISH;
         loc->start = token_start;
-        val->uniqstr = uniqstr_new (last_string);
+        val->TAG = uniqstr_new (last_string);
         STRING_FREE;
         BEGIN INITIAL;
         return TAG;
@@ -591,20 +603,21 @@ eqopt    ([[:space:]]*=)?
 <SC_ESCAPED_STRING,SC_ESCAPED_CHARACTER>
 {
   \\[0-7]{1,3} {
-    unsigned long int c = strtoul (yytext + 1, NULL, 8);
+    verify (UCHAR_MAX < ULONG_MAX);
+    unsigned long c = strtoul (yytext + 1, NULL, 8);
     if (!c || UCHAR_MAX < c)
       complain (loc, complaint, _("invalid number after \\-escape: %s"),
-                   yytext+1);
+                yytext+1);
     else
       obstack_1grow (&obstack_for_string, c);
   }
 
   \\x[0-9abcdefABCDEF]+ {
     verify (UCHAR_MAX < ULONG_MAX);
-    unsigned long int c = strtoul (yytext + 2, NULL, 16);
+    unsigned long c = strtoul (yytext + 2, NULL, 16);
     if (!c || UCHAR_MAX < c)
       complain (loc, complaint, _("invalid number after \\-escape: %s"),
-                   yytext+1);
+                yytext+1);
     else
       obstack_1grow (&obstack_for_string, c);
   }
@@ -624,7 +637,7 @@ eqopt    ([[:space:]]*=)?
     int c = convert_ucn_to_byte (yytext);
     if (c <= 0)
       complain (loc, complaint, _("invalid number after \\-escape: %s"),
-                   yytext+1);
+                yytext+1);
     else
       obstack_1grow (&obstack_for_string, c);
   }
@@ -636,7 +649,7 @@ eqopt    ([[:space:]]*=)?
     else
       p = quotearg_style_mem (escape_quoting_style, p, 1);
     complain (loc, complaint, _("invalid character after \\-escape: %s"),
-                 p);
+              p);
   }
 }
 
@@ -707,7 +720,7 @@ eqopt    ([[:space:]]*=)?
   "{"|"<"{splice}"%"  STRING_GROW; nesting++;
   "%"{splice}">"      STRING_GROW; nesting--;
 
-  /* Tokenize '<<%' correctly (as '<<' '%') rather than incorrrectly
+  /* Tokenize '<<%' correctly (as '<<' '%') rather than incorrectly
      (as '<' '<%').  */
   "<"{splice}"<"  STRING_GROW;
 
@@ -724,9 +737,8 @@ eqopt    ([[:space:]]*=)?
       {
         STRING_FINISH;
         loc->start = code_start;
-        val->code = last_string;
         BEGIN INITIAL;
-        return BRACED_CODE;
+        RETURN_VALUE (BRACED_CODE, last_string);
       }
   }
 }
@@ -739,9 +751,8 @@ eqopt    ([[:space:]]*=)?
       {
         STRING_FINISH;
         loc->start = code_start;
-        val->code = last_string;
         BEGIN INITIAL;
-        return BRACED_PREDICATE;
+        RETURN_VALUE (BRACED_PREDICATE, last_string);
       }
     else
       obstack_1grow (&obstack_for_string, '}');
@@ -757,9 +768,8 @@ eqopt    ([[:space:]]*=)?
   "%}" {
     STRING_FINISH;
     loc->start = code_start;
-    val->code = last_string;
     BEGIN INITIAL;
-    return PROLOGUE;
+    RETURN_VALUE (PROLOGUE, last_string);
   }
 
   <<EOF>>   unexpected_eof (code_start, "%}");
@@ -776,9 +786,8 @@ eqopt    ([[:space:]]*=)?
   <<EOF>> {
     STRING_FINISH;
     loc->start = code_start;
-    val->code = last_string;
     BEGIN INITIAL;
-    return EPILOGUE;
+    RETURN_VALUE (EPILOGUE, last_string);
   }
 }
 
@@ -787,8 +796,16 @@ eqopt    ([[:space:]]*=)?
   | By default, grow the string obstack with the input.  |
   `-----------------------------------------------------*/
 
-<SC_COMMENT,SC_LINE_COMMENT,SC_BRACED_CODE,SC_PREDICATE,SC_PROLOGUE,SC_EPILOGUE,SC_STRING,SC_CHARACTER,SC_ESCAPED_STRING,SC_ESCAPED_CHARACTER>. |
-  <SC_COMMENT,SC_LINE_COMMENT,SC_BRACED_CODE,SC_PREDICATE,SC_PROLOGUE,SC_EPILOGUE>\n    STRING_GROW;
+<SC_COMMENT,SC_LINE_COMMENT,SC_BRACED_CODE,SC_PREDICATE,SC_PROLOGUE,SC_EPILOGUE,SC_STRING,SC_CHARACTER,SC_ESCAPED_STRING,SC_ESCAPED_CHARACTER>
+{
+  /* Accept multibyte characters in one block instead of byte after
+     byte, so that add_column_width and mbsnwidth can compute correct
+     screen width.
+
+     Add a fallthrough "|." so that non UTF-8 input is still accepted
+     and does not jam the scanner.  */
+  {mbchar}|.   STRING_GROW;
+}
 
 %%
 
@@ -844,16 +861,20 @@ no_cr_read (FILE *fp, char *buf, size_t size)
 | Scan NUMBER for a base-BASE integer at location LOC.  |
 `------------------------------------------------------*/
 
-static unsigned long int
+static unsigned long
 scan_integer (char const *number, int base, location loc)
 {
   verify (INT_MAX < ULONG_MAX);
-  unsigned long int num = strtoul (number, NULL, base);
+  if (base == 16)
+    complain (&loc, Wyacc,
+              _("POSIX Yacc does not support hexadecimal literals"));
+
+  unsigned long num = strtoul (number, NULL, base);
 
   if (INT_MAX < num)
     {
       complain (&loc, complaint, _("integer out of range: %s"),
-                   quote (number));
+                quote (number));
       num = INT_MAX;
     }
 
@@ -871,7 +892,7 @@ static int
 convert_ucn_to_byte (char const *ucn)
 {
   verify (UCHAR_MAX <= INT_MAX);
-  unsigned long int code = strtoul (ucn + 2, NULL, 16);
+  unsigned long code = strtoul (ucn + 2, NULL, 16);
 
   /* FIXME: Currently we assume Unicode-compatible unibyte characters
      on ASCII hosts (i.e., Latin-1 on hosts with 8-bit bytes).  On
@@ -926,7 +947,7 @@ static void
 handle_syncline (char *args, location loc)
 {
   char *file;
-  unsigned long int lineno = strtoul (args, &file, 10);
+  unsigned long lineno = strtoul (args, &file, 10);
   if (INT_MAX <= lineno)
     {
       complain (&loc, Wother, _("line number overflow"));
@@ -939,7 +960,7 @@ handle_syncline (char *args, location loc)
       *strchr (file + 1, '"') = '\0';
       current_file = uniqstr_new (file + 1);
     }
-  boundary_set (&scanner_cursor, current_file, lineno, 1);
+  boundary_set (&scanner_cursor, current_file, lineno, 1, 1);
 }
 
 
@@ -957,9 +978,10 @@ unexpected_end (boundary start, char const *msgid, char const *token_end)
   loc.end = scanner_cursor;
   size_t i = strlen (token_end);
 
-/* Adjust scanner cursor so that any later message does not count
+  /* Adjust scanner cursor so that any later message does not count
      the characters about to be inserted.  */
   scanner_cursor.column -= i;
+  scanner_cursor.byte -= i;
 
   while (i != 0)
     unput (token_end[--i]);
@@ -968,7 +990,7 @@ unexpected_end (boundary start, char const *msgid, char const *token_end)
   /* Instead of '\'', display "'".  */
   if (STREQ (token_end, "'\\''"))
     token_end = "\"'\"";
-  complain (&loc, complaint, _(msgid), token_end);
+  complain (&loc, complaint, msgid, token_end);
 }
 
 
@@ -981,7 +1003,7 @@ unexpected_end (boundary start, char const *msgid, char const *token_end)
 static void
 unexpected_eof (boundary start, char const *token_end)
 {
-  unexpected_end (start, N_("missing %s at end of file"), token_end);
+  unexpected_end (start, _("missing %s at end of file"), token_end);
 }
 
 
@@ -992,7 +1014,7 @@ unexpected_eof (boundary start, char const *token_end)
 static void
 unexpected_newline (boundary start, char const *token_end)
 {
-  unexpected_end (start, N_("missing %s at end of line"), token_end);
+  unexpected_end (start, _("missing %s at end of line"), token_end);
 }
 
 

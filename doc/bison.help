@@ -1,10 +1,10 @@
-bison (GNU Bison) 3.0.4
+bison (GNU Bison) 3.4.1
 Written by Robert Corbett and Richard Stallman.
 
-Copyright (C) 2015 Free Software Foundation, Inc.
+Copyright (C) 2019 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-Usage: src/bison [OPTION]... FILE
+Usage: bison [OPTION]... FILE
 Generate a deterministic LR or generalized LR (GLR) parser employing
 LALR(1), IELR(1), or canonical LR(1) parser tables.  IELR(1) and
 canonical LR(1) support is experimental.
@@ -16,10 +16,13 @@ Operation modes:
   -h, --help                 display this help and exit
   -V, --version              output version information and exit
       --print-localedir      output directory containing locale-dependent data
+                             and exit
       --print-datadir        output directory containing skeletons and XSLT
+                             and exit
+  -u, --update               apply fixes to the source grammar file and exit
   -y, --yacc                 emulate POSIX Yacc
   -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY
-  -f, --feature[=FEATURE]    activate miscellaneous features
+  -f, --feature[=FEATURES]   activate miscellaneous features
 
 Parser:
   -L, --language=LANGUAGE          specify the output programming language
@@ -47,13 +50,13 @@ Output:
                              (the XML schema is experimental)
 
 Warning categories include:
-  'midrule-values'    unset or unused midrule values
-  'yacc'              incompatibilities with POSIX Yacc
   'conflicts-sr'      S/R conflicts (enabled by default)
   'conflicts-rr'      R/R conflicts (enabled by default)
   'deprecated'        obsolete constructs
   'empty-rule'        empty rules without %empty
+  'midrule-values'    unset or unused midrule values
   'precedence'        useless precedence and associativity
+  'yacc'              incompatibilities with POSIX Yacc
   'other'             all other warnings (enabled by default)
   'all'               all the warnings except 'yacc'
   'no-CATEGORY'       turn off warnings in CATEGORY
@@ -68,13 +71,19 @@ THINGS is a list of comma separated words that can include:
   'all'          include all the above information
   'none'         disable the report
 
-FEATURE is a list of comma separated words that can include:
-  'caret'        show errors with carets
-  'all'          all of the above
-  'none'         disable all of the above
+FEATURES is a list of comma separated words that can include:
+  'caret', 'diagnostics-show-caret'
+    show errors with carets
+  'fixit', 'diagnostics-parseable-fixits'
+    show machine-readable fixes
+  'syntax-only'
+    do not generate any file
+  'all'
+    all of the above
+  'none'
+    disable all of the above
   
 Report bugs to <bug-bison@gnu.org>.
 GNU Bison home page: <http://www.gnu.org/software/bison/>.
 General help using GNU software: <http://www.gnu.org/gethelp/>.
-Report translation bugs to <http://translationproject.org/team/>.
 For complete documentation, run: info bison.
