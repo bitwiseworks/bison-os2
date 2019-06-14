@@ -15,7 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+case `uname` in
+OS/2*)
+SHELL=sh
+EXEEXT=.exe
+;;
+*)
 SHELL=/bin/sh
+EXEEXT=''
+;;
+esac
 export SHELL
 
 me=$(basename "$1" .test)
@@ -33,7 +42,7 @@ cwd=$(pwd)
 # The exercised program.
 for p in "$cwd/examples/$medir/$me"
 do
-    if test -x "$p"; then
+    if test -x "$p$EXEEXT"; then
         prog=$p
         break
     elif test -f "$p.class"; then
@@ -103,7 +112,7 @@ run ()
 
 # We have cd'd one level deeper.
 case $1 in
-  /*) . "$1";;
+  [\\/]* | ?:[\\/]*) . "$1";;
   *)  . "../$1";;
 esac
 
