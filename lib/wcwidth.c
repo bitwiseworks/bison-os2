@@ -26,7 +26,6 @@
 #include "streq.h"
 #include "uniwidth.h"
 
-#ifndef __KLIBC__
 /* Returns 1 if the current locale is an UTF-8 locale, 0 otherwise.  */
 static inline int
 is_locale_utf8 (void)
@@ -72,4 +71,3 @@ wcwidth (wchar_t wc)
 #endif
     }
 }
-#endif // __KLIBC__
