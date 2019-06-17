@@ -25,7 +25,7 @@ m4_define([AT_CHECK_FILES],
 [AT_CHECK([[find . -type f |
            $PERL -ne '
       s,\./,,; chomp;
-      push @file, $_ unless m{^($2|testsuite.log)$};
+      push @file, $_ unless m{^($2|$2~|testsuite.log)$};
       END { print join (" ", sort @file), "\n" }']],
           [], [$1
 ])])
