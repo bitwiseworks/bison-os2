@@ -117,6 +117,9 @@ fixits_run (void)
   char *backup = asnprintf (buf, &len, "%s~", input);
   if (!backup)
     xalloc_die ();
+#ifdef __OS2__ //be sure that the file is closed as esle rename fails
+  caret_free();
+#endif
   if (rename (input, backup))
     error (EXIT_FAILURE, get_errno (),
            _("%s: cannot backup"), quotearg_colon (input));
